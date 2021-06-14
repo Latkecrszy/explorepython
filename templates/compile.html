@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Compiler</title>
+        <link href="{{ url_for('static', filename='compile.css') }}" rel="stylesheet"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    </head>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <body>
+        <div id="left">
+            <div class="title">If Statements</div>
+            <div class="description">What are they, and why are they important?</div>
+        </div>
+        <div id="divide"></div>
+        <div id="right"></div>
+    </body>
+<script src="{{ url_for('static', filename='compile.js') }}"></script>
+</html>
