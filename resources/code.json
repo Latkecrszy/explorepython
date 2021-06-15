@@ -1,0 +1,19 @@
+{
+  "intro": [
+    "def say_hello():",
+    "\treturn \"Hello!\"",
+    "",
+    "def say_goodbye():",
+    "\treturn \"Goodbye!\"",
+    "",
+    "",
+    "print(say_hello())",
+    "print(say_goodbye())"
+  ],
+  "variables": [
+    "number = ",
+    "",
+    "",
+    "print(number)"
+  ]
+}

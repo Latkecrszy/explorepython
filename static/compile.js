@@ -1,16 +1,5 @@
 let codeArea = CodeMirror(document.getElementById("right"), {
-            value: `print('Hello, World!')
-# This is a comment
-hello = "hi"
-class Testing:
-    def __init__(self, test):
-        self.testing = test
-
-    def test(self):
-        print(hello)
-        return self.testing
-
-print(Testing("test").test())`,
+            value: code,
             mode:  "python",
             lineNumbers: true,
             theme: "theme",
@@ -47,6 +36,7 @@ async function run() {
     let previousOutput = output.getValue()
     output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     document.getElementById("right").children[3].remove()
+    checkResults(results['run'])
 }
 
 function createShell(value) {
@@ -86,4 +76,23 @@ function keyBind(editor) {
             document.getElementById("right").children[3].remove()
         }
     })
+}
+
+function checkResults(results) {
+    let regex = new RegExp(expected_output)
+    console.log(expected_output)
+    console.log(results)
+    console.log(regex.test(results['stdout']))
+    if (results['stderr'] !== '') {
+        console.log("error")
+        return send_notif("error", `Error: \n${results['stderr']}\nTry again!`)
+    }
+    if (!regex.test(results['stdout'])) {
+        console.log("Incorrect")
+        return send_notif("incorrect", `Incorrect output: \n${results['stdout']}\nTry again!`)
+    }
+    console.log("Correct")
+    let responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
+    let response = responses[Math.floor(Math.random()*responses.length)];
+    return send_notif("correct", `${response} Click Next to continue!`)
 }

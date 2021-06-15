@@ -7,7 +7,18 @@ html, body {
 
 #right {margin-left: auto; width: 50vw}
 
-#left {margin: 20px auto 0 30px; width: 50vw}
+#left {
+    margin: 20px auto 0 30px;
+    width: 50vw;
+    padding-right: 10px;
+    line-height: 22px;
+}
+
+#left code {
+    background: #616161;
+    border-radius: 3px;
+    padding: 2px
+}
 
 #spacer {
     width: 50vw;
@@ -27,7 +38,7 @@ html, body {
 .description {color: #edf1f7; font: 400 20px Roboto}
 
 .run {
-    background: #38d420;
+    background: #10cc5b;
     width: 100px;
     height: 50px;
     border: none;
@@ -45,3 +56,22 @@ html, body {
     z-index: 3
 
 }
+
+#next {
+    position: absolute;
+    bottom: 8px;
+    right: 52vw;
+    z-index: 3;
+    background: none;
+    border: 2px solid #10cc5b;
+    color: #999e9c;
+    cursor: not-allowed;
+}
+
+#next.valid {
+    background: #10cc5b;
+    cursor: pointer;
+    color: white
+}
+
+p, h1, h2, h3, h4, h5 {color: white; font-family: Roboto}

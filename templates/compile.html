@@ -11,13 +11,20 @@
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
-    <body>
+    <script>
+        async function lesson(lessonName) {
+            document.getElementById("left").innerHTML = await (await fetch(`/lesson?name=${lessonName}`)).text()
+        }
+        let code = `{{ code|safe }}`
+        let expected_output = `{{ expected_output|safe }}`
+    </script>
+    <body onload="lesson('{{ name }}')">
         <div id="left">
-            <div class="title">If Statements</div>
-            <div class="description">What are they, and why are they important?</div>
+
         </div>
         <div id="divide"></div>
         <div id="right"></div>
+        <button id="next" class="run">Next</button>
     </body>
-<script src="{{ url_for('static', filename='compile.js') }}"></script>
+    <script src="{{ url_for('static', filename='compile.js') }}"></script>
 </html>
