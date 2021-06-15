@@ -1,3 +1,7 @@
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 let codeArea = CodeMirror(document.getElementById("right"), {
             value: code,
             mode:  "python",
@@ -78,21 +82,50 @@ function keyBind(editor) {
     })
 }
 
-function checkResults(results) {
+async function checkResults(results) {
     let regex = new RegExp(expected_output)
     console.log(expected_output)
     console.log(results)
     console.log(regex.test(results['stdout']))
     if (results['stderr'] !== '') {
         console.log("error")
-        return send_notif("error", `Error: \n${results['stderr']}\nTry again!`)
+        return await send_notif("error", `Error: \n${results['stderr']}\nTry again!`)
     }
     if (!regex.test(results['stdout'])) {
         console.log("Incorrect")
-        return send_notif("incorrect", `Incorrect output: \n${results['stdout']}\nTry again!`)
+        return await send_notif("incorrect", `Incorrect output: \n${results['stdout']}\nTry again!`)
     }
     console.log("Correct")
     let responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
     let response = responses[Math.floor(Math.random()*responses.length)];
-    return send_notif("correct", `${response} Click Next to continue!`)
+    document.getElementById("next").classList.add("valid")
+    return await send_notif("correct", `${response} Click Next to continue!`)
+}
+
+async function send_notif(status, text) {
+    let notif = document.getElementById("notif")
+    if (status === "correct") {
+        notif.style.border = "3px solid #22e325"
+    }
+    else if (status === "incorrect") {
+        notif.style.border = "3px solid #f5aa20"
+    }
+    else if (status === "error") {
+        notif.style.border = "3px solid #f53520"
+    }
+    notif.innerText = text
+    notif.style.display = "block"
+    console.log(notif.style)
+    for (let i=0; i<=1; i+=0.01) {
+        notif.style.opacity = i.toString()
+        console.log(notif.style.opacity)
+        await sleep(5)
+    }
+    console.log(notif.style.opacity)
+    await sleep(10000)
+    for (let i=1; i>=0; i-=0.01) {
+        await sleep(5)
+        notif.style.opacity = i.toString()
+    }
+    notif.style.display = "none"
 }
