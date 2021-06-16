@@ -64,13 +64,14 @@ html, body {
     right: 52vw;
     z-index: 3;
     background: #0F192A;
-    border: 2px solid #10cc5b;
+    border: 2px solid #77b590;
     color: #999e9c;
     cursor: not-allowed;
 }
 
 .next.valid, #back {
     background: #10cc5b;
+    border: 2px solid #10cc5b;
     cursor: pointer;
     color: white
 }
