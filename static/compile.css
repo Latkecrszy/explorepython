@@ -10,12 +10,10 @@ html, body {
 #left {
     margin: 20px auto 0 30px;
     width: 50vw;
-    max-height: 100vh;
+    max-height: 90vh;
     line-height: 22px;
-    overflow-y: scroll
+    overflow-y: scroll;
 }
-
-#left div {color: #0F192A}
 
 #left code {
     background: #616161;

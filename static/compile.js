@@ -16,7 +16,7 @@ const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nic
 async function main() {
     const response = await (await fetch(`/lesson?name=${localStorage.getItem('lesson')}`)).json()
     console.log(response)
-    document.getElementById("left").innerHTML = response['lesson'] + `<div>${" f".repeat(50)}</div>`
+    document.getElementById("left").innerHTML = response['lesson']
     expected_output = response['expected_output']
     codeArea = CodeMirror(document.getElementById("right"), {
         value: response['code'],
