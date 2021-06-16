@@ -10,9 +10,12 @@ html, body {
 #left {
     margin: 20px auto 0 30px;
     width: 50vw;
-    padding-right: 10px;
+    max-height: 100vh;
     line-height: 22px;
+    overflow-y: scroll
 }
+
+#left div {color: #0F192A}
 
 #left code {
     background: #616161;
@@ -57,22 +60,24 @@ html, body {
 
 }
 
-#next {
+.next, #back.invalid {
     position: absolute;
     bottom: 8px;
     right: 52vw;
     z-index: 3;
-    background: none;
+    background: #0F192A;
     border: 2px solid #10cc5b;
     color: #999e9c;
     cursor: not-allowed;
 }
 
-#next.valid {
+.next.valid, #back {
     background: #10cc5b;
     cursor: pointer;
     color: white
 }
+
+#back {right: calc(52vw + 120px) !important}
 
 p, h1, h2, h3, h4, h5 {color: white; font-family: Roboto}
 

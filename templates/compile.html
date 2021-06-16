@@ -7,25 +7,27 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    </head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    </head>
+    <script src="{{ url_for('static', filename='compile.js') }}"></script>
     <script>
-        async function lesson(lessonName) {
-            document.getElementById("left").innerHTML = await (await fetch(`/lesson?name=${lessonName}`)).text()
+
+        if (!localStorage.getItem('lesson')) {
+            localStorage.setItem('lesson', 'intro')
         }
-        let code = `{{ code|safe }}`
-        let expected_output = `{{ expected_output|safe }}`
+        main()
     </script>
-    <body onload="lesson('{{ name }}')">
+    <body>
         <div id="notif"></div>
         <div id="left">
 
         </div>
         <div id="divide"></div>
         <div id="right"></div>
-        <button id="next" class="run">Next</button>
+        <button id="next" class="run next" onclick="nextLesson()">Next</button>
+        <button id="back" class="run next" onclick="nextLesson('back')">Back</button>
     </body>
-    <script src="{{ url_for('static', filename='compile.js') }}"></script>
 </html>
