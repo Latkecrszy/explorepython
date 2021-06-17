@@ -59,7 +59,7 @@ async function run() {
     let previousOutput = output.getValue()
     output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     document.getElementById("right").children[3].remove()
-    await checkResults(results['run'])
+    await checkResults(results['run'], code)
 }
 
 
@@ -104,18 +104,26 @@ function keyBind(editor) {
 }
 
 
-async function checkResults(results) {
-    let regex = new RegExp(expected_output)
+async function checkResults(results, code) {
     console.log(expected_output)
     console.log(results)
-    console.log(regex.test(results['stdout']))
     if (results['stderr'] !== '') {
         console.log("error")
-        return await send_notif("error", `Error: \n${results['stderr']}\nTry again!`)
+        let newResults = results['stderr'].split("line")[0]
+        newResults = results['stderr'].replace(newResults, '')
+        return await send_notif("error", `Error: \n${newResults}\nTry again!`)
     }
-    if (!regex.test(results['stdout'])) {
-        console.log("Incorrect")
-        return await send_notif("incorrect", `Incorrect output: \n${results['stdout']}\nTry again!`)
+    if (!results['stdout'].match(expected_output['output'])) {
+        console.log("Incorrect output")
+        console.log(results['stdout'])
+        if (results['stdout'] === '\n') {
+            return await send_notif("incorrect_output", `Incorrect output. Try again!`)
+        }
+        return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
+    }
+    if (code.match(expected_output['input'])) {
+        console.log("Incorrect input")
+        return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
     }
     console.log("Correct")
     let response = responses[Math.floor(Math.random()*responses.length)];
@@ -129,7 +137,7 @@ async function send_notif(status, text) {
     if (status === "correct") {
         notif.style.border = "3px solid #22e325"
     }
-    else if (status === "incorrect") {
+    else if (status.includes("incorrect")) {
         notif.style.border = "3px solid #f5aa20"
     }
     else if (status === "error") {
@@ -137,13 +145,10 @@ async function send_notif(status, text) {
     }
     notif.innerText = text
     notif.style.display = "block"
-    console.log(notif.style)
     for (let i=0; i<=1; i+=0.01) {
         notif.style.opacity = i.toString()
-        console.log(notif.style.opacity)
         await sleep(5)
     }
-    console.log(notif.style.opacity)
     await sleep(10000)
     for (let i=1; i>=0; i-=0.01) {
         await sleep(5)

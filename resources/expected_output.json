@@ -1,5 +1,14 @@
 {
-  "intro": ".*",
-  "variables": ".*",
-  "strings": ".*"
+  "intro": {
+    "output":  ".*",
+    "input": ".*"
+  },
+  "variables": {
+    "output":  ".+",
+    "input": ".*"
+  },
+  "strings": {
+    "output":  ".+",
+    "input": ".*"
+  }
 }

@@ -8,22 +8,26 @@
     "",
     "",
     "print(say_hello())",
-    "print(say_goodbye())"
+    "print(say_goodbye())",
+    ""
   ],
   "variables": [
     "number = ",
     "",
     "",
-    "print(number)"
+    "print(number)",
+    ""
   ],
   "strings": [
-    "#Here, create your string. Name it whatever you want!",
+    "# Here, you can create your string. Name it whatever you want!",
     "",
     "",
     "",
     "",
     "# Down here, you can print it out using the print() function.",
-    "# Put your variable name inside the parenthesis and see its value displayed down below!",
+    "# Put your variable name inside the parenthesis.",
+    "# Its value will be displayed below!",
+    "print()",
     ""
   ]
 }

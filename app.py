@@ -13,14 +13,9 @@ else:
 markdown = Markdown()
 
 
-@app.route("/compile")
+@app.route("/lessons")
 def compile_code():
-    return render_template("compile.html",
-                           name="intro",
-                           code='\n'.join(json.load(open("resources/code.json"))['intro']),
-                           expected_output=json.load(open("resources/expected_output.json"))['intro'])
-
-# TODO: Order: Intro, variables, strings, builtins, ints_and_floats, math, booleans, if_statements, lists, dictionaries, functions
+    return render_template("compile.html")
 
 
 @app.route("/lesson", methods=["GET", "POST"])
