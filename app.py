@@ -31,5 +31,11 @@ def lesson():
     return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": request.args.get('name')})
 
 
+@app.route("/arc-sw.js")
+def arc():
+    return send_file("arc-sw.js")
+
+
+
 if __name__ == '__main__':
     app.run(port=5004)
