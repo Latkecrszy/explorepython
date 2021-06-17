@@ -1,14 +1,14 @@
 {
   "intro": {
     "output":  ".*",
-    "input": ".*"
+    "input": []
   },
   "variables": {
     "output":  ".+",
-    "input": ".*"
+    "input": ["=", "print"]
   },
   "strings": {
     "output":  ".+",
-    "input": ".*"
+    "input": ["=", "print"]
   }
 }

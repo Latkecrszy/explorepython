@@ -121,10 +121,13 @@ async function checkResults(results, code) {
         }
         return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
     }
-    if (code.match(expected_output['input'])) {
+    for (let i of expected_output['input']) {
+        if (!code.includes(i)) {
         console.log("Incorrect input")
         return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
+        }
     }
+
     console.log("Correct")
     let response = responses[Math.floor(Math.random()*responses.length)];
     document.getElementById("next").classList.add("valid")
