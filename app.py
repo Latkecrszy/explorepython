@@ -13,8 +13,13 @@ else:
 markdown = Markdown()
 
 
+@app.route("/")
+def main():
+    return render_template("compile.html")
+
+
 @app.route("/lessons")
-def compile_code():
+def lessons():
     return render_template("compile.html")
 
 
