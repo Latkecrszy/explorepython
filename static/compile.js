@@ -122,6 +122,13 @@ async function checkResults(results, code) {
         return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
     }
     for (let i of expected_output['input']) {
+        if (i.includes("*|*")) {
+            i = i.split("*|*")
+            const check = (array, input) => array.some(item => input.includes(item));
+            if (!i.some(item => code.includes(item))) {
+
+            }
+        }
         if (!code.includes(i)) {
         console.log("Incorrect input")
         return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)

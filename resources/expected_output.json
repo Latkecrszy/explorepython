@@ -9,6 +9,6 @@
   },
   "strings": {
     "output":  ".+",
-    "input": ["=", "print"]
+    "input": ["=", "print", "\"*|*'"]
   }
 }
