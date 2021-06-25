@@ -6,6 +6,12 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+String.prototype.occurrences = function(substring) {
+    return this.split(substring).length-1
+}
+let y = "this is a test"
+console.log(y.occurrences("t"))
+
 // Initialize variables
 let codeArea, expected_output, output;
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
@@ -338,7 +344,9 @@ function keyBindInput(editor, question) {
             console.log(question)
             let content = editor.getValue()
             console.log(content)
-            content = content.replaceAll(`${question}`, "")
+            while (content.occurrences(question) > 1) {
+                content = content.replace(`${question}`, "")
+            }
             console.log(content)
             content = content.split("\n")
             console.log(content)
