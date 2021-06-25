@@ -344,13 +344,16 @@ function keyBindInput(editor, question) {
             console.log(question)
             let content = editor.getValue()
             console.log(content)
-            while (content.occurrences(question) > 1) {
-                content = content.replace(`${question}`, "")
-            }
-            console.log(content)
             content = content.split("\n")
             console.log(content)
             content = content[content.length-1]
+            console.log(content)
+            if (content.occurrences(question) === 1) {content = content.replaceAll(`${question}`, "")}
+            else {
+                while (content.occurrences(question) > 1) {
+                    content = content.replace(`${question}`, "")
+                }
+            }
             console.log(content)
             input_responses.push(content)
             await nextQuestion(question)
