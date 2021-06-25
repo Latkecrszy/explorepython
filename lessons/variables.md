@@ -8,7 +8,7 @@ This tells python that in this program, whenever I put `x`, it is equal to `10`.
 ## Why would I use variables?
 Variables aren't just limited to numbers. There are many data types in python, 
 like strings (letters, numbers, and other characters), integers (whole numbers), floats (decimals), booleans (True or False values), lists (collections of other data types), and more. 
-We'll go over each of these data types in-depth later, but they can all be stored in variables. 
+We'll go over each of these data types in depth later, but they all can be stored in variables. 
 Variables are used to store data in a program. Instead of directly referencing `10` each time, it's much easier to 
 place it in a variable, like `x`, and use the variable instead. 
 

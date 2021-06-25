@@ -1,0 +1,197 @@
+#right {margin-left: auto; width: 50vw}
+
+#left {
+    margin: 20px auto 0 30px;
+    width: 50vw;
+    max-height: 85vh;
+    line-height: 22px;
+    overflow: auto;
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#left::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+}
+
+#left code {
+    background: #616161;
+    border-radius: 3px;
+    padding: 2px
+}
+
+#spacer {
+    width: 50vw;
+    height: 15px;
+    background: #1f2b40;
+    margin: 5px 0
+}
+
+#divide {
+    border-left: 15px solid #1f2b40;
+    height: 100vh;
+    margin: 0 5px
+}
+
+.title {color: #edf1f7; font: 400 35px Roboto}
+
+.description {color: #edf1f7; font: 400 20px Roboto}
+
+.run {
+    background: #10cc5b;
+    width: 100px;
+    height: 50px;
+    border: none;
+    border-radius: 2px;
+    font: 400 18px Roboto;
+    box-shadow: 3px 3px 5px black;
+    margin-left: calc(100% - 107px);
+    cursor: pointer;
+}
+
+#clear {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    z-index: 3
+
+}
+
+.next, #back.invalid {
+    position: absolute;
+    bottom: 8px;
+    right: 52vw;
+    z-index: 3;
+    background: #0F192A;
+    border: 2px solid #77b590;
+    color: #999e9c;
+    cursor: not-allowed;
+}
+
+.next.valid, #back {
+    background: #10cc5b;
+    border: 2px solid #10cc5b;
+    cursor: pointer;
+    color: white
+}
+
+#back {right: calc(52vw + 120px) !important}
+
+#notif {
+    max-width: 300px;
+    min-height: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #0F192A;
+    border: 3px solid #c517d1;
+    display: none;
+    z-index: 4;
+    border-radius: 5px;
+    font: 400 16px Roboto;
+    color: white;
+    padding: 5px
+}
+
+#open_lessons {
+    color: white;
+    height: 40px;
+    width: 150px;
+    border: 3px solid #77b590;
+    position: absolute;
+    top: 5%;
+    right: 48%;
+    transform: translate(-48%, -50%);
+    text-align: center;
+    border-radius: 3px;
+    background: #0F192A;
+    padding-top: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font: 400 20px Roboto;
+}
+
+#lessons {
+    position: absolute;
+    width: 250px;
+    height: 600px;
+    left: -260px;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    align-content: center;
+    background: #0F192A;
+    border: 5px solid #314D67;
+    border-radius: 5px;
+}
+
+#lessons.expanding {
+    animation: expand 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+#lessons.shrinking {
+    animation: shrink 0.5s;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+@keyframes expand {
+    from {left: -260px}
+
+    to {left: 20px}
+}
+
+@keyframes shrink {
+    from {left: 20px}
+
+    to {left: -260px}
+}
+
+.nav_lesson {
+    width: 90%;
+    height: 80px;
+    font: 400 20px Roboto;
+    color: white;
+    background: #1f2b40;
+    margin: 10px 0;
+    box-sizing: border-box;
+    padding-top: 5px;
+    text-align: center;
+    border-radius: 2px;
+    max-height: 80px;
+    position: relative
+}
+
+.unavailable {
+    cursor: not-allowed;
+    border: 2px solid #77b590;
+    color: #999e9c;
+}
+
+.unavailable::after {
+    content: "";
+    display: block;
+    background-image: url("images/lock.png");
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 180px;
+    position: absolute;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: 3px 0
+}
+
+
+.available {
+    cursor: pointer;
+    border: 2px solid #1DC116;
+}

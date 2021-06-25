@@ -8,4 +8,5 @@ In fact, the website you're using right now was written using python!
 ExplorePython offers an interactive environment for learning python in a fun, hands-on way. 
 On the upper right, you'll see some example python code. 
 As you progress through the lessons, more and more of this code will become understandable, and you'll be able to write code like it yourself.
-Go ahead and press `Run` to see what the code does, and then click `Next` to progress to the next lesson, where you'll start learning the fundamentals of python.
+Go ahead and press `Run` to see what the code does. The output of the code will be displayed in the box below it.
+Then, click `Next` to progress to the next lesson, where you'll start learning the fundamentals of python.

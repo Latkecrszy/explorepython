@@ -1,10 +1,13 @@
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 // Initialize variables
-let codeArea;
-let expected_output;
-let output;
+let codeArea, expected_output, output;
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
     "math": 5, "booleans": 6, "if_statements": 7, "lists": 8, "dictionaries": 9, "functions": 10}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
@@ -14,7 +17,9 @@ const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nic
 
 // Create the main function
 async function main() {
-    const response = await (await fetch(`/lesson?name=${localStorage.getItem('lesson')}`)).json()
+    const lesson = localStorage.getItem('lesson')
+    const last_lesson = localStorage.getItem('last_lesson')
+    const response = await (await fetch(`/lesson?name=${lesson}`)).json()
     console.log(response)
     document.getElementById("left").innerHTML = response['lesson']
     expected_output = response['expected_output']
@@ -44,6 +49,30 @@ async function main() {
     output = createShell('>>> ')
     document.body.appendChild(clearButton)
     codeArea.setSize(window.innerWidth / 2, window.innerHeight / 1.7)
+
+    // Add lessons into the menu
+    const lessonNum = lessons_to_nums[last_lesson]
+    const lessons = document.getElementById("lessons")
+    for (let lessonName in lessons_to_nums) {
+        let newLesson = document.createElement("div")
+        newLesson.classList.add("nav_lesson")
+        newLesson.innerText = lessonName.replaceAll("_", " ").capitalize()
+        if (lessons_to_nums[lessonName] <= lessonNum) {
+            newLesson.addEventListener("click", () => {
+                localStorage.setItem('lesson', lessonName)
+                location.reload()}
+            )
+            newLesson.classList.add("available")
+        }
+        else {
+            newLesson.classList.add("unavailable")
+            /*
+            let lock = document.createElement("img")
+            lock.src = "static/images/lock.png"
+            newLesson.appendChild(lock)*/
+        }
+        lessons.appendChild(newLesson)
+    }
 }
 
 
@@ -122,16 +151,19 @@ async function checkResults(results, code) {
         return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
     }
     for (let i of expected_output['input']) {
-        if (i.includes("*|*")) {
-            i = i.split("*|*")
-            const check = (array, input) => array.some(item => input.includes(item));
+        if (i === "'") {
+            i = ["'", '"']
+            console.log(i)
+            console.log(i.some(item => code.includes(item)))
             if (!i.some(item => code.includes(item))) {
-
+                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
             }
         }
-        if (!code.includes(i)) {
-        console.log("Incorrect input")
-        return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
+        else {
+            if (!code.includes(i)) {
+                console.log("Incorrect input")
+                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
+            }
         }
     }
 
@@ -180,8 +212,41 @@ function nextLesson(prev) {
     }
     let newLesson = nums_to_lessons[lessonNum]
     localStorage.setItem("lesson", newLesson)
+    if (!prev) {
+        localStorage.setItem('last_lesson', newLesson)
+    }
     location.reload()
 }
+
+
+function show_lessons() {
+    const lessons = document.getElementById("lessons")
+    const open_lessons = document.getElementById("open_lessons")
+    if (open_lessons.innerText.includes("❰")) {
+        open_lessons.innerText = "View lessons ❱"
+    }
+    else {
+        open_lessons.innerText = "Close lessons ❰"
+    }
+    if (lessons.classList.length === 0) {
+        return lessons.classList.add("expanding")
+    }
+    lessons.classList.toggle("expanding")
+    lessons.classList.toggle("shrinking")
+
+}
+
+document.addEventListener("click", (e) => {
+    console.log(e.target.id)
+    const lessons = document.getElementById("lessons")
+    if (e.target !== lessons && !lessons.contains(e.target) && e.target !== document.getElementById("open_lessons")) {
+        if (document.getElementById("lessons").classList.length !== 0) {
+            document.getElementById("lessons").classList.add("shrinking")
+        }
+
+        document.getElementById("open_lessons").innerText = "View lessons ❱"
+    }
+})
 
 // When the page first loads, make the code check if there is already the key "lesson" in localstorage.
 // If not, it creates one `"lesson": "intro"`

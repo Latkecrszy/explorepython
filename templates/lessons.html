@@ -2,29 +2,31 @@
 <html lang="en">
     <head>
         <title>Compiler</title>
-        <link href="{{ url_for('static', filename='compile.css') }}" rel="stylesheet"/>
+        <link href="{{ url_for('static', filename='globals.css') }}" rel="stylesheet"/>
+        <link href="{{ url_for('static', filename='lessons.css') }}" rel="stylesheet"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
         <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
         <script async src="https://arc.io/widget.min.js#DAoRpT6R"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="title" content="ExplorePython">
-        <meta name="description" content="ExplorePython is a fun, interactive way to learn python. With bite sized mini-lessons and comprehension tests, using explore python guarantees a lot of learning!">
+        <meta name="description" content="ExplorePython is a fun, interactive way to learn python. With bite sized mini-lessons and comprehension tests, using ExplorePython guarantees a lot of learning!">
     </head>
-    <script src="{{ url_for('static', filename='compile.js') }}"></script>
+    <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script>
-
-        if (!localStorage.getItem('lesson')) {
-            localStorage.setItem('lesson', 'intro')
-        }
+        if (!localStorage.getItem('lesson')) {localStorage.setItem('lesson', 'intro')}
+        if (!localStorage.getItem('last_lesson')) {localStorage.setItem('current_lesson', 'intro')}
         main()
     </script>
     <body>
+        <div id="open_lessons" onclick="show_lessons()">View lessons ❱</div>
+        <div id="lessons"></div>
         <div id="notif"></div>
         <div id="left">
 
