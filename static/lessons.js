@@ -13,7 +13,9 @@ const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
     5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'lists', 9: 'dictionaries', 10: 'functions'}
 const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
-
+let questions = []
+let original_questions = []
+let input_responses = []
 
 // Create the main function
 async function main() {
@@ -79,6 +81,9 @@ async function main() {
 async function run() {
     let code = codeArea.getValue()
     console.log(code)
+    if (code.includes("input(")) {
+        return input()
+    }
     let results = await fetch("https://emkc.org/api/v2/piston/execute", {
         method: 'POST',
         body: JSON.stringify({"language": "python", "version": "3.9.4", "files": [{"name": "code.py", "content": code}]})})
@@ -95,10 +100,10 @@ async function run() {
 function createShell(value) {
     output = CodeMirror(document.getElementById("right"), {
         value: value,
-            mode: "python",
-            lineNumbers: true,
-            theme: "theme",
-            indentUnit: 4}
+        mode: "python",
+        lineNumbers: true,
+        theme: "theme",
+        indentUnit: 4}
     )
     output.setSize(window.innerWidth/2, window.innerHeight/2.57-60)
     keyBind(output)
@@ -228,11 +233,15 @@ function show_lessons() {
     else {
         open_lessons.innerText = "Close lessons ❰"
     }
-    if (lessons.classList.length === 0) {
-        return lessons.classList.add("expanding")
+    if (lessons.classList.length === 0 || lessons.classList.contains("shrinking")) {
+        lessons.classList.remove("shrinking")
+        lessons.classList.add("expanding")
     }
-    lessons.classList.toggle("expanding")
-    lessons.classList.toggle("shrinking")
+    else if (lessons.classList.contains("expanding")) {
+        lessons.classList.add("shrinking")
+        lessons.classList.remove("expanding")
+    }
+
 
 }
 
@@ -247,6 +256,99 @@ document.addEventListener("click", (e) => {
         document.getElementById("open_lessons").innerText = "View lessons ❱"
     }
 })
+
+
+async function input() {
+    let code = codeArea.getValue()
+    code = code.split("input")
+    for (let part of code) {
+        if (part.startsWith('(')) {
+            original_questions.push(part.split('(')[1].split(')')[0])
+            let results = await fetch("https://emkc.org/api/v2/piston/execute", {
+                method: 'POST',
+                body: JSON.stringify({
+                    "language": "python",
+                    "version": "3.9.4",
+                    "files": [{"name": "code.py", "content": `print(${part.split('(')[1].split(')')[0]})`}]
+                })
+            })
+            console.log("using API")
+            results = await results.json()
+            questions.push(results['run']['stdout'].replace("\n", ""))
+        }
+    }
+    if (questions.length !== 0) {
+        let previousOutput = output.getValue()
+        output = createShell(previousOutput + '\n' + questions[0])
+        document.getElementById("right").children[3].remove()
+        console.log(output.getValue())
+        console.log(questions)
+        keyBindInput(output, questions[0])
+    }
+}
+
+async function nextQuestion(question) {
+    let previousOutput = output.getValue()
+    if (questions.indexOf(question)+1 === questions.length) {
+        let code = codeArea.getValue()
+        code = code.split("input")
+        console.log(code)
+        for (let part of code) {
+            if (part.startsWith('(')) {
+                let originalPart = `${part}`
+                console.log(part)
+                /*part = part.split(`${question}')`)
+                console.log(part)
+                part = part.join('')
+                part = part.split("\n")
+                part[0] = `"${input_responses[questions.indexOf(question)]}"`
+                console.log(part)*/
+                console.log(original_questions[questions.indexOf(question)])
+                console.log(input_responses[questions.indexOf(question)])
+                code[code.indexOf(originalPart)] = part.replace(`(${original_questions[questions.indexOf(question)]})`, `"${input_responses[questions.indexOf(question)]}"`)
+            }
+        }
+        code = code.join('')
+        console.log(code)
+        let results = await fetch("https://emkc.org/api/v2/piston/execute", {
+            method: 'POST',
+            body: JSON.stringify({
+                "language": "python",
+                "version": "3.9.4",
+                "files": [{"name": "code.py", "content": code}]
+            })
+        })
+        console.log("using API")
+        results = await results.json()
+        console.log(results)
+        output = createShell(previousOutput + '\n' + results['run']['stdout'])
+        document.getElementById("right").children[3].remove()
+        input_responses = []
+        questions = []
+        original_questions = []
+        return keyBind(output)
+    }
+    output = createShell(previousOutput + '\n' + questions[questions.indexOf(question)+1] + '\n>>> ')
+    keyBindInput(output, questions[questions.indexOf(question)+1])
+}
+
+function keyBindInput(editor, question) {
+    editor.setOption("extraKeys", {
+        Enter: async () => {
+            console.log(question)
+            let content = editor.getValue()
+            console.log(content)
+            content = content.replaceAll(`${question}`, "")
+            console.log(content)
+            content = content.split("\n")
+            console.log(content)
+            content = content[content.length-1]
+            console.log(content)
+            input_responses.push(content)
+            await nextQuestion(question)
+        }
+    })
+}
 
 // When the page first loads, make the code check if there is already the key "lesson" in localstorage.
 // If not, it creates one `"lesson": "intro"`

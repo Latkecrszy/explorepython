@@ -19,15 +19,18 @@
     ""
   ],
   "strings": [
+    "# This line is a code comment. Comments are lines that start with a #, and they do nothing to the code.",
+    "# Instead, they are to leave notes for whoever is writing it.",
+    "",
     "# Here, you can create your string. Name it whatever you want!",
     "",
     "",
     "",
-    "",
     "# Down here, you can print it out using the print() function.",
-    "# Put your variable name inside the parenthesis.",
+    "# Put your variable name inside the parentheses.",
     "# Its value will be displayed below!",
     "print()",
     ""
-  ]
+  ],
+  "builtins": ["x = input('test')", "print(x)", "", "", ""]
 }

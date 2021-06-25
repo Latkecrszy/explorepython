@@ -116,7 +116,7 @@
 #lessons {
     position: absolute;
     width: 250px;
-    height: 600px;
+    height: 95%;
     left: -260px;
     top: 10px;
     display: flex;
@@ -127,17 +127,18 @@
     align-content: center;
     background: #0F192A;
     border: 5px solid #314D67;
-    border-radius: 5px;
+    border-radius: 3px;
+    overflow: scroll;
 }
 
 #lessons.expanding {
-    animation: expand 0.5s;
+    animation: expand 0.3s;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
 }
 
 #lessons.shrinking {
-    animation: shrink 0.5s;
+    animation: shrink 0.3s;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
 }
