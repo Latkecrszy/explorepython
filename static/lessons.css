@@ -121,15 +121,15 @@
     top: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     justify-items: center;
     align-items: center;
-    align-content: center;
     background: #0F192A;
     border: 5px solid #314D67;
     border-radius: 3px;
     overflow: scroll;
+    padding-top: 8px
 }
+
 
 #lessons.expanding {
     animation: expand 0.3s;
@@ -157,13 +157,14 @@
 
 .nav_lesson {
     width: 90%;
-    height: 80px;
+    height: 35px;
+    min-height: 35px;
     font: 400 20px Roboto;
     color: white;
     background: #1f2b40;
     margin: 10px 0;
     box-sizing: border-box;
-    padding-top: 5px;
+    padding-top: 3px;
     text-align: center;
     border-radius: 2px;
     max-height: 80px;

@@ -9,15 +9,13 @@ String.prototype.capitalize = function() {
 String.prototype.occurrences = function(substring) {
     return this.split(substring).length-1
 }
-let y = "this is a test"
-console.log(y.occurrences("t"))
 
 // Initialize variables
 let codeArea, expected_output, output;
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
-    "math": 5, "booleans": 6, "if_statements": 7, "lists": 8, "dictionaries": 9, "functions": 10}
+    "math": 5, "booleans": 6, "if_statements": 7, "modules": 8, "lists": 9, "dictionaries": 10, "functions": 11}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
-    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'lists', 9: 'dictionaries', 10: 'functions'}
+    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'modules', 9: 'lists', 10: 'dictionaries', 11: 'functions'}
 const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
 let questions = []
 let original_questions = []
@@ -27,6 +25,7 @@ let input_responses = []
 async function main() {
     const lesson = localStorage.getItem('lesson')
     const last_lesson = localStorage.getItem('last_lesson')
+    console.log(last_lesson)
     const response = await (await fetch(`/lesson?name=${lesson}`)).json()
     console.log(response)
     document.getElementById("left").innerHTML = response['lesson']
@@ -217,21 +216,26 @@ async function send_notif(status, text) {
 }
 
 
-function nextLesson(prev) {
-    let lessonNum;
+async function nextLesson(prev) {
+    let nextLessonNum
+    let currentLesson = localStorage.getItem("lesson")
+    let lastLesson = localStorage.getItem("last_lesson")
     if (prev) {
-        lessonNum = lessons_to_nums[localStorage.getItem('lesson')]-1
         if (document.getElementById("back").classList.contains("invalid")) {return}
+        nextLessonNum = lessons_to_nums[currentLesson]-1
     }
     else {
-        lessonNum = lessons_to_nums[localStorage.getItem('lesson')]+1
         if (!document.getElementById("next").classList.contains("valid")) {return}
+        nextLessonNum = lessons_to_nums[currentLesson]+1
     }
-    let newLesson = nums_to_lessons[lessonNum]
-    localStorage.setItem("lesson", newLesson)
-    if (!prev) {
-        localStorage.setItem('last_lesson', newLesson)
+    if (nextLessonNum > lessons_to_nums[lastLesson]) {
+        console.log(nextLessonNum)
+        console.log(lessons_to_nums[lastLesson])
+        console.log(lastLesson)
+        console.log(nums_to_lessons[nextLessonNum])
+        localStorage.setItem("last_lesson", nums_to_lessons[nextLessonNum])
     }
+    localStorage.setItem("lesson", nums_to_lessons[nextLessonNum])
     location.reload()
 }
 
@@ -343,6 +347,7 @@ async function nextQuestion(question) {
         return await checkResults(results['run'], codeArea.getValue())
     }
     output = createShell(previousOutput + '\n' + questions[questions.indexOf(question)+1] + '\n>>> ')
+    document.getElementById("right").children[3].remove()
     keyBindInput(output, questions[questions.indexOf(question)+1])
 
 }

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script>console.log(`first_last_lesson: ${localStorage.getItem("last_lesson")}`)</script>
         <title>Compiler</title>
         <link href="{{ url_for('static', filename='globals.css') }}" rel="stylesheet"/>
         <link href="{{ url_for('static', filename='lessons.css') }}" rel="stylesheet"/>
@@ -22,15 +23,14 @@
     <script>
         if (!localStorage.getItem('lesson')) {localStorage.setItem('lesson', 'intro')}
         if (!localStorage.getItem('last_lesson')) {localStorage.setItem('last_lesson', 'intro')}
+        console.log(`first_last_lesson: ${localStorage.getItem("last_lesson")}`)
         main()
     </script>
     <body>
         <div id="open_lessons" onclick="show_lessons()">View lessons ❱</div>
         <div id="lessons"></div>
         <div id="notif"></div>
-        <div id="left">
-
-        </div>
+        <div id="left"></div>
         <div id="divide"></div>
         <div id="right"></div>
         <button id="next" class="run next" onclick="nextLesson()">Next</button>
