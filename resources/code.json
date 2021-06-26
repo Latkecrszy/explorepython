@@ -1,14 +1,15 @@
 {
   "intro": [
-    "def say_hello():",
-    "\treturn \"Hello!\"",
+    "class HelloWorld:",
+    "\tdef __init__(self, hello):",
+    "\t\tself.hello = hello",
     "",
-    "def say_goodbye():",
-    "\treturn \"Goodbye!\"",
+    "\tdef say_hello(self):",
+    "\t\treturn self.hello",
     "",
     "",
-    "print(say_hello())",
-    "print(say_goodbye())",
+    "hello_world = HelloWorld(\"Hello, World!\")",
+    "print(hello_world.say_hello())",
     ""
   ],
   "variables": [
@@ -19,7 +20,8 @@
     ""
   ],
   "strings": [
-    "# This line is a code comment. Comments are lines that start with a #, and they do nothing to the code.",
+    "# This line is a code comment. ",
+    "# Comments are lines that start with a #, and they do nothing to the code.",
     "# Instead, they are to leave notes for whoever is writing it.",
     "",
     "# Here, you can create your string. Name it whatever you want!",
@@ -32,5 +34,14 @@
     "print()",
     ""
   ],
-  "builtins": ["x = input('test')", "print(x)", "", "", ""]
+  "builtins": [
+    "# Up here, create your variable with input.",
+    "",
+    "",
+    "",
+    "",
+    "# Here, display your variable's output with print()",
+    "",
+    ""
+  ]
 }

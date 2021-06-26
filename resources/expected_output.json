@@ -13,6 +13,6 @@
   },
   "builtins": {
     "output": [".+"],
-    "input": []
+    "input": ["input", "print", "=", "'"]
   }
 }

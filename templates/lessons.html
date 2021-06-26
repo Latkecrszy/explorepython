@@ -21,7 +21,7 @@
     <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script>
         if (!localStorage.getItem('lesson')) {localStorage.setItem('lesson', 'intro')}
-        if (!localStorage.getItem('last_lesson')) {localStorage.setItem('current_lesson', 'intro')}
+        if (!localStorage.getItem('last_lesson')) {localStorage.setItem('last_lesson', 'intro')}
         main()
     </script>
     <body>

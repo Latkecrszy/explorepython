@@ -81,6 +81,11 @@ async function main() {
         }
         lessons.appendChild(newLesson)
     }
+    console.log(lessonNum)
+    console.log(lessons_to_nums[lesson])
+    if (lessonNum > lessons_to_nums[lesson]) {
+        document.getElementById("next").classList.add("valid")
+    }
 }
 
 
@@ -100,6 +105,7 @@ async function run() {
     output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     document.getElementById("right").children[3].remove()
     await checkResults(results['run'], code)
+
 }
 
 
@@ -278,6 +284,7 @@ async function input() {
                     "files": [{"name": "code.py", "content": `print(${part.split('(')[1].split(')')[0]})`}]
                 })
             })
+            console.log(part)
             console.log("using API")
             results = await results.json()
             questions.push(results['run']['stdout'].replace("\n", ""))
@@ -332,10 +339,12 @@ async function nextQuestion(question) {
         input_responses = []
         questions = []
         original_questions = []
-        return keyBind(output)
+        keyBind(output)
+        return await checkResults(results['run'], codeArea.getValue())
     }
     output = createShell(previousOutput + '\n' + questions[questions.indexOf(question)+1] + '\n>>> ')
     keyBindInput(output, questions[questions.indexOf(question)+1])
+
 }
 
 function keyBindInput(editor, question) {
