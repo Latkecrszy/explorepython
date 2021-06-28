@@ -1,22 +1,22 @@
 {
   "intro": {
     "output":  [".*"],
-    "input": {"contains":  [], "excludes":  []}
+    "input": {"includes":  [], "excludes":  []}
   },
   "variables": {
     "output":  [".+"],
-    "input": {"contains":  ["=", "print"], "excludes":  []}
+    "input": {"includes":  ["=", "print"], "excludes":  []}
   },
   "strings": {
     "output":  [".+"],
-    "input": {"contains":  ["=", "print", "'"], "excludes":  []}
+    "input": {"includes":  ["=", "print", "'"], "excludes":  []}
   },
   "builtins": {
     "output": [".+"],
-    "input": {"contains":  ["input", "print", "=", "'"], "excludes":  []}
+    "input": {"includes":  ["input", "print", "=", "'"], "excludes":  []}
   },
   "ints_and_floats": {
     "output": ["[0-9]+"],
-    "input": {"contains":  ["round", "print", "."], "excludes":  ["'"]}
+    "input": {"includes":  ["round", "print", "."], "excludes":  ["'"]}
   }
 }
