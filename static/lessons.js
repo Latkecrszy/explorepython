@@ -35,7 +35,8 @@ async function main() {
         mode: "python",
         lineNumbers: true,
         theme: "theme",
-        indentUnit: 4
+        indentUnit: 4,
+        lineWrapping: true
     });
     console.log(response['name'])
     if (response['name'] === "intro") {document.getElementById("back").classList.add("invalid")}
@@ -114,7 +115,8 @@ function createShell(value) {
         mode: "python",
         lineNumbers: true,
         theme: "theme",
-        indentUnit: 4}
+        indentUnit: 4,
+        lineWrapping: true}
     )
     output.setSize(window.innerWidth/2, window.innerHeight/2.57-60)
     keyBind(output)
@@ -166,7 +168,11 @@ async function checkResults(results, code) {
         }
         return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
     }
-    for (let i of expected_output['input']) {
+
+    if (expected_output['input']['excludes'].some(item => results['stdout'].match(item))) {
+        return await send_notif("incorrect_input", `You got the right result, but your code uses a method that is not allowed. Try again!`)
+    }
+    for (let i of expected_output['input']['includes']) {
         if (i === "'") {
             i = ["'", '"']
             console.log(i)

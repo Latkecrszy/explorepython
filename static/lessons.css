@@ -35,10 +35,6 @@
     margin: 0 5px
 }
 
-.title {color: #edf1f7; font: 400 35px Roboto}
-
-.description {color: #edf1f7; font: 400 20px Roboto}
-
 .run {
     background: #10cc5b;
     width: 100px;
@@ -101,7 +97,7 @@
     width: 150px;
     border: 3px solid #77b590;
     position: absolute;
-    top: 5%;
+    top: 30px;
     right: 48%;
     transform: translate(-48%, -50%);
     text-align: center;
@@ -196,4 +192,8 @@
 .available {
     cursor: pointer;
     border: 2px solid #1DC116;
+}
+
+h1 {
+    line-height: 38px
 }

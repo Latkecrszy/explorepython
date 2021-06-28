@@ -28,12 +28,6 @@ def lesson():
     content = markdown(open(f"lessons/{request.args.get('name')}.md").read())
     code = '\n'.join(json.load(open("resources/code.json"))[request.args.get('name')])
     expected_output = json.load(open("resources/expected_output.json"))[request.args.get('name')]
-    print(expected_output)
-    for key, value in expected_output.items():
-        for index, i in enumerate(value):
-            x = i.replace('\\', '')
-            expected_output[key][index] = f'''{x}'''
-    print(expected_output)
     return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": request.args.get('name')})
 
 
