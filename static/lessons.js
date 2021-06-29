@@ -11,7 +11,7 @@ String.prototype.occurrences = function(substring) {
 }
 
 // Initialize variables
-let codeArea, expected_output, output;
+let codeArea_desktop, codeArea_mobile, expected_output, output;
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
     "math": 5, "booleans": 6, "if_statements": 7, "modules": 8, "lists": 9, "dictionaries": 10, "functions": 11}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
@@ -29,8 +29,9 @@ async function main() {
     const response = await (await fetch(`/lesson?name=${lesson}`)).json()
     console.log(response)
     document.getElementById("left").innerHTML = response['lesson']
+    document.getElementById("page_lesson_mobile").innerHTML = response['lesson']
     expected_output = response['expected_output']
-    codeArea = CodeMirror(document.getElementById("right"), {
+    codeArea_desktop = CodeMirror(document.getElementById("right"), {
         value: response['code'],
         mode: "python",
         lineNumbers: true,
@@ -38,9 +39,21 @@ async function main() {
         indentUnit: 4,
         lineWrapping: true
     });
+    codeArea_mobile = CodeMirror(document.getElementById("page_code_mobile"), {
+        value: response['code'],
+        mode: "python",
+        lineNumbers: true,
+        theme: "theme",
+        indentUnit: 4,
+        lineWrapping: true
+    });
+    // Put in divider
+    console.log(document.getElementById("page_code_mobile").children)
+    console.log(document.getElementById("page_code_mobile").style)
     console.log(response['name'])
-    if (response['name'] === "intro") {document.getElementById("back").classList.add("invalid")}
+    if (response['name'] === "intro") {document.getElementById("back_desktop").classList.add("invalid")}
     let spacer = document.createElement("div")
+    spacer.classList.add("spacer")
     spacer.id = "spacer"
     let runButton = document.createElement("button")
     runButton.addEventListener("click", () => run())
@@ -55,12 +68,11 @@ async function main() {
     document.getElementById("right").appendChild(runButton)
     document.getElementById("right").appendChild(spacer)
     output = createShell('>>> ')
-    document.body.appendChild(clearButton)
-    codeArea.setSize(window.innerWidth / 2, window.innerHeight / 1.7)
-
+    document.getElementById("desktop").appendChild(clearButton)
+    codeArea_desktop.setSize(window.innerWidth / 2, window.innerHeight / 1.7)
+    codeArea_mobile.setSize(window.innerWidth, window.innerHeight / 1.7)
     // Add lessons into the menu
     const lessonNum = lessons_to_nums[last_lesson]
-    const lessons = document.getElementById("lessons")
     for (let lessonName in lessons_to_nums) {
         let newLesson = document.createElement("div")
         newLesson.classList.add("nav_lesson")
@@ -79,18 +91,28 @@ async function main() {
             lock.src = "static/images/lock.png"
             newLesson.appendChild(lock)*/
         }
-        lessons.appendChild(newLesson)
+        document.getElementById("lessons_desktop").appendChild(newLesson)
+        console.log("appended")
+        let otherNewLesson = newLesson.cloneNode(true)
+        otherNewLesson.addEventListener("click", () => {
+            console.log("working")
+                localStorage.setItem('lesson', lessonName)
+                location.reload()
+        }
+            )
+        document.getElementById("lessons_mobile").appendChild(otherNewLesson)
     }
     console.log(lessonNum)
     console.log(lessons_to_nums[lesson])
     if (lessonNum > lessons_to_nums[lesson]) {
-        document.getElementById("next").classList.add("valid")
+        document.getElementById("next_desktop").classList.add("valid")
     }
+    document.getElementById("page_code_mobile").style.display = "none"
 }
 
 
 async function run() {
-    let code = codeArea.getValue()
+    let code = codeArea_desktop.getValue()
     console.log(code)
     if (code.includes("input(")) {
         return input()
@@ -105,7 +127,6 @@ async function run() {
     output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     document.getElementById("right").children[3].remove()
     await checkResults(results['run'], code)
-
 }
 
 
@@ -191,13 +212,13 @@ async function checkResults(results, code) {
 
     console.log("Correct")
     let response = responses[Math.floor(Math.random()*responses.length)];
-    document.getElementById("next").classList.add("valid")
+    document.getElementById("next_desktop").classList.add("valid")
     return await send_notif("correct", `${response} Click Next to continue!`)
 }
 
 
 async function send_notif(status, text) {
-    let notif = document.getElementById("notif")
+    let notif = document.getElementById("notif_desktop")
     if (status === "correct") {
         notif.style.border = "3px solid #22e325"
     }
@@ -227,11 +248,11 @@ async function nextLesson(prev) {
     let currentLesson = localStorage.getItem("lesson")
     let lastLesson = localStorage.getItem("last_lesson")
     if (prev) {
-        if (document.getElementById("back").classList.contains("invalid")) {return}
+        if (document.getElementById("back_desktop").classList.contains("invalid")) {return}
         nextLessonNum = lessons_to_nums[currentLesson]-1
     }
     else {
-        if (!document.getElementById("next").classList.contains("valid")) {return}
+        if (!document.getElementById("next_desktop").classList.contains("valid")) {return}
         nextLessonNum = lessons_to_nums[currentLesson]+1
     }
     if (nextLessonNum > lessons_to_nums[lastLesson]) {
@@ -246,42 +267,62 @@ async function nextLesson(prev) {
 }
 
 
-function show_lessons() {
-    const lessons = document.getElementById("lessons")
-    const open_lessons = document.getElementById("open_lessons")
-    if (open_lessons.innerText.includes("❰")) {
-        open_lessons.innerText = "View lessons ❱"
+function show_lessons(platform) {
+    if (platform === 'desktop') {
+        const lessons = document.getElementById("lessons_desktop")
+        const open_lessons = document.getElementById("open_lessons_desktop")
+        if (open_lessons.innerText.includes("❰")) {
+            open_lessons.innerText = "View lessons ❱"
+        }
+        else {
+            open_lessons.innerText = "Close lessons ❰"
+        }
+        if (lessons.classList.length === 0 || lessons.classList.contains("shrinking")) {
+            lessons.classList.remove("shrinking")
+            lessons.classList.add("expanding")
+        }
+        else if (lessons.classList.contains("expanding")) {
+            lessons.classList.add("shrinking")
+            lessons.classList.remove("expanding")
+        }
     }
     else {
-        open_lessons.innerText = "Close lessons ❰"
-    }
-    if (lessons.classList.length === 0 || lessons.classList.contains("shrinking")) {
+        const lessons = document.getElementById("lessons_mobile")
         lessons.classList.remove("shrinking")
         lessons.classList.add("expanding")
     }
-    else if (lessons.classList.contains("expanding")) {
+}
+
+function close_lessons() {
+    const lessons = document.getElementById("lessons_mobile")
         lessons.classList.add("shrinking")
         lessons.classList.remove("expanding")
-    }
-
-
 }
 
 document.addEventListener("click", (e) => {
     console.log(e.target.id)
-    const lessons = document.getElementById("lessons")
-    if (e.target !== lessons && !lessons.contains(e.target) && e.target !== document.getElementById("open_lessons")) {
-        if (document.getElementById("lessons").classList.length !== 0) {
-            document.getElementById("lessons").classList.add("shrinking")
+    console.log(e.target)
+    const lessons_desktop = document.getElementById("lessons_desktop")
+    const lessons_mobile = document.getElementById("lessons_mobile")
+    if (
+        e.target !== lessons_desktop && e.target !== lessons_mobile &&
+        (!lessons_desktop.contains(e.target) && e.target !== document.getElementById("open_lessons_desktop")) &&
+        ((!lessons_mobile.contains(e.target) || e.target) === document.getElementById("close_lessons_mobile"))
+    ) {
+        if (document.getElementById("lessons_desktop").classList.length !== 0) {
+            document.getElementById("lessons_desktop").classList.add("shrinking")
         }
+        if (document.getElementById("lessons_mobile").classList.length !== 0) {
+            document.getElementById("lessons_mobile").classList.add("shrinking")
+        }
+        document.getElementById("open_lessons_desktop").innerText = "View lessons ❱"
 
-        document.getElementById("open_lessons").innerText = "View lessons ❱"
     }
 })
 
 
 async function input() {
-    let code = codeArea.getValue()
+    let code = codeArea_desktop.getValue()
     code = code.split("input")
     for (let part of code) {
         if (part.startsWith('(')) {
@@ -313,7 +354,7 @@ async function input() {
 async function nextQuestion(question) {
     let previousOutput = output.getValue()
     if (questions.indexOf(question)+1 === questions.length) {
-        let code = codeArea.getValue()
+        let code = codeArea_desktop.getValue()
         code = code.split("input")
         console.log(code)
         for (let part of code) {
@@ -350,7 +391,7 @@ async function nextQuestion(question) {
         questions = []
         original_questions = []
         keyBind(output)
-        return await checkResults(results['run'], codeArea.getValue())
+        return await checkResults(results['run'], codeArea_desktop.getValue())
     }
     output = createShell(previousOutput + '\n' + questions[questions.indexOf(question)+1] + '\n>>> ')
     document.getElementById("right").children[3].remove()
@@ -379,6 +420,26 @@ function keyBindInput(editor, question) {
             await nextQuestion(question)
         }
     })
+}
+
+function select_tab(tab) {
+    let other_tab
+    if (tab === 'lesson') {
+        tab = document.getElementById('tab_mobile_lesson')
+        other_tab = document.getElementById('tab_mobile_code')
+        document.getElementById("page_lesson_mobile").style.display = "block"
+        document.getElementById("page_code_mobile").style.display = "none"
+    }
+    else {
+        tab = document.getElementById('tab_mobile_code')
+        other_tab = document.getElementById('tab_mobile_lesson')
+        document.getElementById("page_lesson_mobile").style.display = "none"
+        document.getElementById("page_code_mobile").style.display = "flex"
+    }
+    tab.classList.add("selected")
+    tab.classList.remove("deselected")
+    other_tab.classList.add("deselected")
+    other_tab.classList.remove("selected")
 }
 
 // When the page first loads, make the code check if there is already the key "lesson" in localstorage.

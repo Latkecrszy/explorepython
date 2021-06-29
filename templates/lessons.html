@@ -27,13 +27,29 @@
         main()
     </script>
     <body>
-        <div id="open_lessons" onclick="show_lessons()">View lessons ❱</div>
-        <div id="lessons"></div>
-        <div id="notif"></div>
-        <div id="left"></div>
-        <div id="divide"></div>
-        <div id="right"></div>
-        <button id="next" class="run next" onclick="nextLesson()">Next</button>
-        <button id="back" class="run next" onclick="nextLesson('back')">Back</button>
+        <div id="desktop">
+            <div id="open_lessons_desktop" onclick="show_lessons('desktop')">View lessons ❱</div>
+            <div id="lessons_desktop"></div>
+            <div id="notif_desktop"></div>
+            <div id="left"></div>
+            <div class="divide"></div>
+            <div id="right"></div>
+            <button id="next_desktop" class="run next_desktop" onclick="nextLesson()">Next</button>
+            <button id="back_desktop" class="run next_desktop" onclick="nextLesson('back')">Back</button>
+        </div>
+        <div id="mobile">
+            <div id="lessons_mobile">
+                <div id="close_lessons_mobile" onclick="close_lessons()">✕</div>
+            </div>
+            <header>
+                <button id="open_lessons_mobile" onclick="show_lessons('mobile')">☰</button>
+                <div id="tabs_mobile">
+                    <button class="tab selected" id="tab_mobile_lesson" onclick="select_tab('lesson')">Lesson</button>
+                    <button class="tab" id="tab_mobile_code" onclick="select_tab('code')">Code</button>
+                </div>
+            </header>
+            <div id="page_lesson_mobile"></div>
+            <div id="page_code_mobile"></div>
+        </div>
     </body>
 </html>
