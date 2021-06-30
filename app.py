@@ -5,11 +5,11 @@ from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 dotenv.load_dotenv()
-if os.environ.get("MONGO_URI", None):
+"""if os.environ.get("MONGO_URI", None):
     app.config['MONGO_URI'] = os.environ.get("MONGO_URI", None)
     mongo = PyMongo(app)
 else:
-    mongo = None
+    mongo = None"""
 markdown = Markdown()
 
 

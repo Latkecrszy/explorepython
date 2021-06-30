@@ -24,32 +24,35 @@
         if (!localStorage.getItem('lesson')) {localStorage.setItem('lesson', 'intro')}
         if (!localStorage.getItem('last_lesson')) {localStorage.setItem('last_lesson', 'intro')}
         console.log(`first_last_lesson: ${localStorage.getItem("last_lesson")}`)
-        main()
+        createDesktop()
     </script>
     <body>
+        <div id="notif_desktop"></div>
+        <div id="lessons">
+            <div class="close_lessons" onclick="hideLessons()">✕</div>
+        </div>
         <div id="desktop">
-            <div id="open_lessons_desktop" onclick="show_lessons('desktop')">View lessons ❱</div>
-            <div id="lessons_desktop"></div>
-            <div id="notif_desktop"></div>
+            <div id="open_lessons_desktop" class="open_lessons" onclick="showLessons()">☰</div>
+            <button id="clear_desktop" class="run clear" onclick="changeShell('desktop', '>>> ')">Clear</button>
             <div id="left"></div>
             <div class="divide"></div>
             <div id="right"></div>
-            <button id="next_desktop" class="run next_desktop" onclick="nextLesson()">Next</button>
-            <button id="back_desktop" class="run next_desktop" onclick="nextLesson('back')">Back</button>
+            <button id="next_desktop" class="run next" onclick="changeLesson('next', 'mobile')">Next</button>
+            <button id="back_desktop" class="run next" onclick="changeLesson('back', 'mobile')">Back</button>
         </div>
         <div id="mobile">
-            <div id="lessons_mobile">
-                <div id="close_lessons_mobile" onclick="close_lessons()">✕</div>
-            </div>
             <header>
-                <button id="open_lessons_mobile" onclick="show_lessons('mobile')">☰</button>
+                <button id="open_lessons_mobile" class="open_lessons" onclick="showLessons()">☰</button>
                 <div id="tabs_mobile">
-                    <button class="tab selected" id="tab_mobile_lesson" onclick="select_tab('lesson')">Lesson</button>
-                    <button class="tab" id="tab_mobile_code" onclick="select_tab('code')">Code</button>
+                    <button class="tab selected" id="tab_mobile_lesson" onclick="switchTab('lesson')">Lesson</button>
+                    <button class="tab" id="tab_mobile_code" onclick="switchTab('code')">Code</button>
                 </div>
             </header>
-            <div id="page_lesson_mobile"></div>
-            <div id="page_code_mobile"></div>
+            <button id="clear_mobile" class="run clear" onclick="changeShell('mobile', '>>> ')">Clear</button>
+            <button id="next_mobile" class="run next_mobile" onclick="changeLesson('next', 'mobile')">Next</button>
+            <button id="back_mobile" class="run next_mobile" onclick="changeLesson('back', 'mobile')">Back</button>
+            <div id=lesson_page_mobile"></div>
+            <div id="code_page_mobile"></div>
         </div>
     </body>
 </html>

@@ -17,7 +17,7 @@
     display: none;
 }
 
-#left code, #page_lesson_mobile code {
+#left code, #lesson_page_mobile\" code {
     background: #616161;
     border-radius: 3px;
     padding: 2px;
@@ -48,30 +48,43 @@
     cursor: pointer;
 }
 
-#clear {
+.clear {
     position: absolute;
     bottom: 8px;
     right: 8px;
     z-index: 3
-
 }
 
-.next_desktop, #back_desktop.invalid {
+#clear_mobile {display: none}
+
+.next, #back_desktop.invalid, .next_mobile, #back_mobile.invalid {
     position: absolute;
     bottom: 8px;
     right: 52vw;
-    z-index: 3;
+    z-index: 5;
     background: #0F192A;
     border: 2px solid #77b590;
     color: #999e9c;
     cursor: not-allowed;
 }
 
-.next_desktop.valid, #back_desktop {
+.next.valid, #back_desktop, .next_mobile.valid, #back_mobile {
     background: #10cc5b;
     border: 2px solid #10cc5b;
     cursor: pointer;
-    color: white
+    color: white;
+    z-index: 5
+}
+
+.next_mobile {
+    position: absolute;
+    bottom: 8px;
+    left: 118px;
+    margin-left: 0;
+}
+
+#back_mobile {
+    left: 8px
 }
 
 #back_desktop {right: calc(52vw + 120px) !important}
@@ -92,25 +105,7 @@
     padding: 5px
 }
 
-#open_lessons_desktop {
-    color: white;
-    height: 40px;
-    width: 150px;
-    border: 3px solid #77b590;
-    position: absolute;
-    top: 30px;
-    right: 48%;
-    transform: translate(-48%, -50%);
-    text-align: center;
-    border-radius: 3px;
-    background: #0F192A;
-    padding-top: 5px;
-    box-sizing: border-box;
-    cursor: pointer;
-    font: 400 20px Roboto;
-}
-
-#lessons_desktop {
+#lessons {
     position: absolute;
     width: 300px;
     height: 97%;
@@ -124,17 +119,18 @@
     border: 5px solid #314D67;
     border-radius: 3px;
     overflow: scroll;
-    padding-top: 8px
+    padding-top: 50px;
+    z-index: 5;
 }
 
 
-#lessons_desktop.expanding {
+#lessons.visible {
     animation: expand 0.3s;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
 }
 
-#lessons_desktop.shrinking {
+#lessons.invisible {
     animation: shrink 0.3s;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
@@ -150,6 +146,18 @@
     from {left: 0}
 
     to {left: -310px}
+}
+
+@keyframes expand_mobile {
+    from {left: -95%}
+
+    to {left: 0}
+}
+
+@keyframes shrink_mobile {
+    from {left: 0}
+
+    to {left: -95%}
 }
 
 .nav_lesson {
@@ -172,6 +180,7 @@
     cursor: not-allowed;
     border: 2px solid #77b590;
     color: #999e9c;
+    pointer-events: none
 }
 
 .unavailable::after {
@@ -186,13 +195,15 @@
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
-    margin: 3px 0
+    margin: 3px 0;
+    pointer-events: none
 }
 
 
 .available {
     cursor: pointer;
     border: 2px solid #1DC116;
+    pointer-events: all
 }
 
 h1 {
@@ -207,6 +218,7 @@ h1 {
     width: 100%;
     height: 100%;
 }
+
 #mobile {
     left: 5000px;
     top: 0;
@@ -216,93 +228,33 @@ h1 {
     height: 100%;
 }
 
-@media (max-width: 900px) {
-    #desktop {left: 5000px}
-    #mobile {left: 0}
-    .unavailable::after {
-        right: 250px
-    }
-    html {overflow: scroll !important}
-}
-
-#lessons_mobile {
-    width: 100vw;
-    height: 90vh;
-    position: absolute;
-    display: none;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-    left: 0;
-    top: 0;
-    background: #314D67;
-    padding: 30px 0 50px 0;
-    z-index: 3;
-    overflow: scroll;
-}
-
-#lessons_mobile.expanding {
-    animation: show_lessons_mobile 0.3s;
-    animation-fill-mode: forwards;
-    animation-timing-function: linear;
-    display: flex;
-}
-
-#lessons_mobile.shrinking {
-    animation: close_lessons_mobile 0.3s;
-    animation-fill-mode: forwards;
-    animation-timing-function: linear;
-    display: flex
-}
-
-#lessons_mobile .nav_lesson {
-    min-height: 50px !important;
-    font-size: 24px;
-    padding-top: 8px;
-
-}
-
-@keyframes close_lessons_mobile {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-        z-index: -1
-    }
-}
-
-@keyframes show_lessons_mobile {
-    from {
-        opacity: 0
-    }
-    to {
-        opacity: 1
-    }
-}
-
-#open_lessons_mobile, #close_lessons_mobile {
+#open_lessons_mobile, .close_lessons, .open_lessons {
     position: absolute;
     height: 50px;
-    width: 50px;
+    width: 55px;
     border: none;
     background: #314D67;
     font: 400 30px Roboto;
     color: white;
     border-radius: 2px;
     cursor: pointer;
+    text-align: center;
+    padding-top: 3px;
+    box-sizing: border-box
 }
 
-#open_lessons_mobile {
+#open_lessons_mobile, .open_lessons {
     top: 0;
     left: 0;
     margin-right: 15px;
     z-index: 2
 }
 
-#close_lessons_mobile {
-    top: 5px;
-    right: -15px;
+.close_lessons {
+    top: 0;
+    right: 0;
+    text-align: center;
+    box-sizing: border-box
 }
 
 #tabs_mobile {
@@ -357,18 +309,74 @@ h1 {
     }
 }
 
-#page_lesson_mobile {
+#lesson_page_mobile\" {
     margin: 50px 30px 30px 30px;
     line-height: 22px;
-    font-size: 17px
+    font-size: 17px;
+    overflow: scroll;
+    height: calc(90vh - 60px);
+    max-height: calc(90vh - 60px);
+    overflow: -moz-scrollbars-none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-#page_lesson_mobile code {font-size: 14px}
+#lesson_page_mobile\"::-webkit-scrollbar {
+    width: 0 !important;
+    display: none;
+}
 
-#page_code_mobile {
-    width: calc(100% - 60px);
+#lesson_page_mobile\" code {font-size: 14px}
+
+#code_page_mobile {
+    width: calc(100% - 40px);
     height: calc(100% - 75px);
-    margin: 75px 30px 0 30px;
+    margin: 75px 30px 0 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#spacer_mobile {
+    width: 104%
+}
+
+#run_mobile {
+    margin-left: calc(100% - 80px);
 }
 
 html {overflow: hidden}
+
+@media (max-width: 900px) {
+    #desktop {left: 5000px !important}
+    #mobile {left: 0 !important}
+    .unavailable::after {
+        right: 250px
+    }
+    html {overflow-y: scroll !important}
+    .open_lessons {
+        padding-top: 0 !important;
+    }
+
+    #lessons {
+        width: 90%;
+        left: -95%;
+    }
+
+    .nav_lesson {
+        width: 90%;
+        border: none;
+        padding-top: 5px
+    }
+
+    #lessons.visible {
+        animation: expand_mobile 0.3s;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
+    }
+
+    #lessons.invisible {
+        animation: shrink_mobile 0.3s;
+        animation-fill-mode: forwards;
+        animation-timing-function: linear;
+    }
+}

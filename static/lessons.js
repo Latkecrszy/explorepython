@@ -11,73 +11,165 @@ String.prototype.occurrences = function(substring) {
 }
 
 // Initialize variables
-let codeArea_desktop, codeArea_mobile, expected_output, output;
+let variables = {
+    codeAreas: {desktop: {input: null, output: null}, mobile: {input: null, output: null}},
+    expected_output: null,
+    statements: [],
+    original_statements: [],
+    input_responses: [],
+    lesson: localStorage.getItem('lesson'),
+    last_lesson: localStorage.getItem('last_lesson'),
+    lesson_info: null
+}
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
     "math": 5, "booleans": 6, "if_statements": 7, "modules": 8, "lists": 9, "dictionaries": 10, "functions": 11}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
     5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'modules', 9: 'lists', 10: 'dictionaries', 11: 'functions'}
 const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
-let questions = []
-let original_questions = []
-let input_responses = []
 
-// Create the main function
-async function main() {
-    const lesson = localStorage.getItem('lesson')
-    const last_lesson = localStorage.getItem('last_lesson')
-    console.log(last_lesson)
-    const response = await (await fetch(`/lesson?name=${lesson}`)).json()
-    console.log(response)
-    document.getElementById("left").innerHTML = response['lesson']
-    document.getElementById("page_lesson_mobile").innerHTML = response['lesson']
-    expected_output = response['expected_output']
-    codeArea_desktop = CodeMirror(document.getElementById("right"), {
-        value: response['code'],
+
+// Key Components:
+/*
+Function to create desktop site   DONE
+Function to create mobile site   DONE
+Function to add content to lessons menu   DONE
+Function to open lessons menu   DONE
+Function to close lessons menu   DONE
+Function to run code and return output   DONE
+Function to change content of shell (and create it)   DONE
+Function to check their response and display whether or not it was correct (and adjust next buttons)   DONE
+Function to change lesson (forwards or backwards)    DONE
+Function to send a notification   DONE
+Function to switch tabs (mobile only)   DONE
+Functions to handle input builtin
+ */
+
+// Create the desktop version of the website
+async function createDesktop() {
+    // Get the lesson, code example, and expected output from the API
+    const lesson_info = await (await fetch(`/lesson?name=${variables['lesson']}`)).json()
+    variables['lesson_info'] = lesson_info
+    variables['expected_output'] = lesson_info['expected_output']
+    document.getElementById("left").innerHTML = lesson_info['lesson']
+
+    // Create the editor
+    variables['codeAreas']['desktop']['input'] = CodeMirror(document.getElementById("right"), {
+        value: lesson_info['code'],
         mode: "python",
         lineNumbers: true,
         theme: "theme",
         indentUnit: 4,
         lineWrapping: true
     });
-    codeArea_mobile = CodeMirror(document.getElementById("page_code_mobile"), {
-        value: response['code'],
-        mode: "python",
-        lineNumbers: true,
-        theme: "theme",
-        indentUnit: 4,
-        lineWrapping: true
-    });
-    // Put in divider
-    console.log(document.getElementById("page_code_mobile").children)
-    console.log(document.getElementById("page_code_mobile").style)
-    console.log(response['name'])
-    if (response['name'] === "intro") {document.getElementById("back_desktop").classList.add("invalid")}
-    let spacer = document.createElement("div")
+    variables['codeAreas']['desktop']['input'].setSize(window.innerWidth / 2, window.innerHeight / 1.7)
+    // Disable the back button if on the first lesson
+    if (lesson_info['name'] === "intro") {
+        document.getElementById("back_desktop").classList.add("invalid")
+    }
+
+    // Create the page components
+    const spacer = document.createElement("div")
     spacer.classList.add("spacer")
-    spacer.id = "spacer"
-    let runButton = document.createElement("button")
-    runButton.addEventListener("click", () => run())
-    runButton.id = "run"
+    spacer.id = "spacer_desktop"
+
+    const runButton = document.createElement("button")
+    runButton.addEventListener("click", (e) => run(e))
+    runButton.id = "run_desktop"
     runButton.classList.add("run")
     runButton.innerText = "Run ❯"
-    let clearButton = document.createElement("button")
-    clearButton.addEventListener("click", () => clear())
-    clearButton.id = "clear"
-    clearButton.classList.add("run")
-    clearButton.innerText = "Clear"
+
+    // Add the components to the page
     document.getElementById("right").appendChild(runButton)
     document.getElementById("right").appendChild(spacer)
-    output = createShell('>>> ')
-    document.getElementById("desktop").appendChild(clearButton)
-    codeArea_desktop.setSize(window.innerWidth / 2, window.innerHeight / 1.7)
-    codeArea_mobile.setSize(window.innerWidth, window.innerHeight / 1.7)
-    // Add lessons into the menu
-    const lessonNum = lessons_to_nums[last_lesson]
+
+    // Create the shell
+    changeShell('desktop', '>>> ', true)
+    const lessonNum = lessons_to_nums[variables['last_lesson']]
+    if (lessonNum > lessons_to_nums[variables['lesson']]) {
+        document.getElementById("next_desktop").classList.add("valid")
+    }
+    // Create the mobile page
+    await createMobile()
+}
+
+
+// Create the mobile version of the website
+async function createMobile() {
+    // Create the lesson content
+    console.log(document.getElementsByTagName("div"))
+    console.log(document.getElementById("lesson_page_mobile\""))
+    document.getElementById("lesson_page_mobile\"").innerHTML = variables['lesson_info']['lesson']
+
+    // Create the editor
+    variables['codeAreas']['mobile']['input'] = CodeMirror(document.getElementById("code_page_mobile"), {
+        value: variables['lesson_info']['code'],
+        mode: "python",
+        lineNumbers: true,
+        theme: "theme",
+        indentUnit: 4,
+        lineWrapping: true
+    });
+    variables['codeAreas']['mobile']['input'].setSize(window.innerWidth, window.innerHeight / 2.5)
+
+    // Create the page components
+    const spacer = document.createElement("div")
+    spacer.classList.add("spacer")
+    spacer.id = "spacer_mobile"
+    const runButton = document.createElement("button")
+    runButton.addEventListener("click", (e) => run(e))
+    runButton.id = "run_mobile"
+    runButton.classList.add("run")
+    runButton.innerText = "Run ❯"
+
+    // Add the components to the page
+    document.getElementById("code_page_mobile").appendChild(runButton)
+    document.getElementById("code_page_mobile").appendChild(spacer)
+    changeShell('mobile', '>>> ', true)
+
+    // Create the back and next buttons
+    const nextButton = document.createElement("button")
+    nextButton.id = "next_mobile"
+    nextButton.classList.add("run")
+    nextButton.classList.add("button_mobile")
+    if (lessons_to_nums[variables['last_lesson']] > lessons_to_nums[variables['lesson']]) {
+        nextButton.classList.add("valid")
+    }
+    nextButton.innerText = "Next"
+    nextButton.addEventListener("click", () => {changeLesson('next')})
+    const backButton = document.createElement("button")
+    backButton.id = "back_mobile"
+    backButton.classList.add("run")
+    backButton.classList.add("button_mobile")
+    backButton.innerText = "Back"
+    backButton.addEventListener("click", () => {changeLesson('back')})
+
+    // Hide the code page
+    document.getElementById("code_page_mobile").style.display = "none"
+    // Allow them to move forward if they've completed this one
+    const lessonNum = lessons_to_nums[variables['last_lesson']]
+    if (lessonNum > lessons_to_nums[variables['lesson']]) {
+        document.getElementById("next_mobile").classList.add("valid")
+    }
+    // Don't let them move back on the first lesson
+    if (variables['lesson_info']['name'] === "intro") {
+        document.getElementById("back_mobile").classList.add("invalid")
+    }
+    addLessonsContent()
+}
+
+
+// Add content to the lessons menu
+function addLessonsContent() {
+    // Iterate through the lesson names
     for (let lessonName in lessons_to_nums) {
+        // Create a lesson div
         let newLesson = document.createElement("div")
         newLesson.classList.add("nav_lesson")
+        // Set its text to the name of the lesson it navigates to
         newLesson.innerText = lessonName.replaceAll("_", " ").capitalize()
-        if (lessons_to_nums[lessonName] <= lessonNum) {
+        // Check if they have been to this lesson yet
+        if (lessons_to_nums[lessonName] <= lessons_to_nums[variables['last_lesson']]) {
+            // If they have, add a click listener that takes them to that lesson
             newLesson.addEventListener("click", () => {
                 localStorage.setItem('lesson', lessonName)
                 location.reload()}
@@ -85,96 +177,132 @@ async function main() {
             newLesson.classList.add("available")
         }
         else {
+            // If they haven't, disable the lesson
             newLesson.classList.add("unavailable")
-            /*
-            let lock = document.createElement("img")
-            lock.src = "static/images/lock.png"
-            newLesson.appendChild(lock)*/
         }
-        document.getElementById("lessons_desktop").appendChild(newLesson)
-        console.log("appended")
-        let otherNewLesson = newLesson.cloneNode(true)
-        otherNewLesson.addEventListener("click", () => {
-            console.log("working")
-                localStorage.setItem('lesson', lessonName)
-                location.reload()
-        }
-            )
-        document.getElementById("lessons_mobile").appendChild(otherNewLesson)
+        // Add the lesson to the lessons menu
+        document.getElementById("lessons").appendChild(newLesson)
     }
-    console.log(lessonNum)
-    console.log(lessons_to_nums[lesson])
-    if (lessonNum > lessons_to_nums[lesson]) {
-        document.getElementById("next_desktop").classList.add("valid")
-    }
-    document.getElementById("page_code_mobile").style.display = "none"
 }
 
 
-async function run() {
-    let code = codeArea_desktop.getValue()
-    console.log(code)
-    if (code.includes("input(")) {
-        return input()
-    }
+// Show the lessons menu
+function showLessons() {
+    const lessons = document.getElementById("lessons")
+    lessons.classList.add("visible")
+    lessons.classList.remove("invisible")
+}
+
+
+// Hide the lessons menu
+function hideLessons() {
+    const lessons = document.getElementById("lessons")
+    lessons.classList.add("invisible")
+    lessons.classList.remove("visible")
+}
+
+
+// Execute code and return the output
+async function execute(code) {
     let results = await fetch("https://emkc.org/api/v2/piston/execute", {
         method: 'POST',
-        body: JSON.stringify({"language": "python", "version": "3.9.4", "files": [{"name": "code.py", "content": code}]})})
-    console.log(results)
+        body: JSON.stringify({"language": "python", "version": "3.9.4", "files": [{"name": "main.py", "content": code}]})})
     results = await results.json()
     console.log(results)
-    let previousOutput = output.getValue()
-    output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
-    document.getElementById("right").children[3].remove()
+    return results
+}
+
+
+// Change the content of the shell editor
+function changeShell(platform, content, create) {
+    let output
+    console.log(platform)
+    if (platform === 'desktop') {
+        console.log("desktop")
+        // Recreate the codeArea on the desktop version
+        output = CodeMirror(document.getElementById("right"), {
+            value: content,
+            mode: "python",
+            lineNumbers: true,
+            theme: "theme",
+            indentUnit: 4,
+            lineWrapping: true}
+        )
+        output.setSize(window.innerWidth/2, window.innerHeight/2.57-60)
+    }
+    else if (platform === 'mobile') {
+        // Recreate the codeArea on the mobile version
+        output = CodeMirror(document.getElementById("code_page_mobile"), {
+            value: content,
+            mode: "python",
+            lineNumbers: true,
+            theme: "theme",
+            indentUnit: 4,
+            lineWrapping: true}
+        )
+        output.setSize(window.innerWidth, window.innerHeight/2.57)
+    }
+    console.log(create)
+    if (create === undefined) {
+        if (platform === 'desktop') {
+            document.getElementById("right").children[3].remove()
+        }
+        else {
+            document.getElementById("code_page_mobile").children[3].remove()
+        }
+
+    }
+    console.log(output)
+    console.log(platform)
+    keyBind(output, platform)
+    variables['codeAreas'][platform]['output'] = output
+}
+
+
+// Switch the current tab on mobile
+function switchTab(tab) {
+    let other_tab
+    if (tab === 'lesson') {
+        tab = document.getElementById('tab_mobile_lesson')
+        other_tab = document.getElementById('tab_mobile_code')
+        document.getElementById("lesson_page_mobile\"").style.display = "block"
+        document.getElementById("code_page_mobile").style.display = "none"
+        document.getElementById("clear_mobile").style.display = "none"
+    }
+    else {
+        tab = document.getElementById('tab_mobile_code')
+        other_tab = document.getElementById('tab_mobile_lesson')
+        document.getElementById("lesson_page_mobile\"").style.display = "none"
+        document.getElementById("code_page_mobile").style.display = "flex"
+        document.getElementById("clear_mobile").style.display = "block"
+    }
+    tab.classList.add("selected")
+    tab.classList.remove("deselected")
+    other_tab.classList.add("deselected")
+    other_tab.classList.remove("selected")
+}
+
+
+// Listener for the run button
+async function run(event) {
+    let platform
+    console.log(event.target.id)
+    event.target.id === 'run_desktop' ? platform = 'desktop' : platform = 'mobile'
+    let code = variables['codeAreas'][platform]['input'].getValue()
+    if (code.includes("input(")) {
+        return input(platform)
+    }
+    let results = await execute(code)
+    console.log(results)
+    let previousOutput = variables['codeAreas'][platform]['output'].getValue()
+    changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     await checkResults(results['run'], code)
 }
 
 
-function createShell(value) {
-    output = CodeMirror(document.getElementById("right"), {
-        value: value,
-        mode: "python",
-        lineNumbers: true,
-        theme: "theme",
-        indentUnit: 4,
-        lineWrapping: true}
-    )
-    output.setSize(window.innerWidth/2, window.innerHeight/2.57-60)
-    keyBind(output)
-    return output
-}
-
-
-function clear() {
-    createShell('>>> ')
-    document.getElementById("right").children[3].remove()
-}
-
-
-function keyBind(editor) {
-    editor.setOption("extraKeys", {
-        Enter: async () => {
-            let content = editor.getValue()
-            let splitContent = content.split(">>> ")
-            console.log(splitContent)
-            content = splitContent[content.split(">>> ").length-1]
-            console.log(content)
-            let results = await fetch("https://emkc.org/api/v2/piston/execute", {
-                method: 'POST',
-                body: JSON.stringify({"language": "python", "version": "3.9.4", "files": [{"name": "code.py", "content": content}]})
-            })
-            results = await results.json()
-            let previousOutput = output.getValue()
-            output = createShell(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
-            document.getElementById("right").children[3].remove()
-        }
-    })
-}
-
-
+// Check the results of their code
 async function checkResults(results, code) {
-    console.log(expected_output)
-    console.log(results)
+    let expected_output = variables['expected_output']
     if (results['stderr'] !== '') {
         console.log("error")
         let newResults = results['stderr'].split("line")[0]
@@ -213,7 +341,22 @@ async function checkResults(results, code) {
     console.log("Correct")
     let response = responses[Math.floor(Math.random()*responses.length)];
     document.getElementById("next_desktop").classList.add("valid")
+    document.getElementById("next_mobile").classList.add("valid")
     return await send_notif("correct", `${response} Click Next to continue!`)
+}
+
+
+function keyBind(editor, platform) {
+    editor.setOption("extraKeys", {
+        Enter: async () => {
+            let content = editor.getValue()
+            let splitContent = content.split(">>> ")
+            content = splitContent[content.split(">>> ").length-1]
+            let results = await execute(content)
+            let previousOutput = variables['codeAreas'][platform]['output'].getValue()
+            changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+        }
+    })
 }
 
 
@@ -243,163 +386,73 @@ async function send_notif(status, text) {
 }
 
 
-async function nextLesson(prev) {
-    let nextLessonNum
-    let currentLesson = localStorage.getItem("lesson")
-    let lastLesson = localStorage.getItem("last_lesson")
-    if (prev) {
-        if (document.getElementById("back_desktop").classList.contains("invalid")) {return}
-        nextLessonNum = lessons_to_nums[currentLesson]-1
+function changeLesson(direction, platform) {
+    let nextLesson
+    if (direction === 'next') {
+        if (!document.getElementById(`next_${platform}`).classList.contains("valid")) {
+            return
+        }
+        nextLesson = lessons_to_nums[variables['lesson']]+1
     }
-    else {
-        if (!document.getElementById("next_desktop").classList.contains("valid")) {return}
-        nextLessonNum = lessons_to_nums[currentLesson]+1
+    else if (direction === 'back') {
+        if (document.getElementById(`back_${platform}`).classList.contains("invalid")) {
+            return
+        }
+        nextLesson = lessons_to_nums[variables['lesson']]-1
     }
-    if (nextLessonNum > lessons_to_nums[lastLesson]) {
-        console.log(nextLessonNum)
-        console.log(lessons_to_nums[lastLesson])
-        console.log(lastLesson)
-        console.log(nums_to_lessons[nextLessonNum])
-        localStorage.setItem("last_lesson", nums_to_lessons[nextLessonNum])
+    if (nextLesson > lessons_to_nums[variables['last_lesson']]) {
+        localStorage.setItem("last_lesson", nums_to_lessons[nextLesson])
     }
-    localStorage.setItem("lesson", nums_to_lessons[nextLessonNum])
+    localStorage.setItem("lesson", nums_to_lessons[nextLesson])
     location.reload()
 }
 
 
-function show_lessons(platform) {
-    if (platform === 'desktop') {
-        const lessons = document.getElementById("lessons_desktop")
-        const open_lessons = document.getElementById("open_lessons_desktop")
-        if (open_lessons.innerText.includes("❰")) {
-            open_lessons.innerText = "View lessons ❱"
-        }
-        else {
-            open_lessons.innerText = "Close lessons ❰"
-        }
-        if (lessons.classList.length === 0 || lessons.classList.contains("shrinking")) {
-            lessons.classList.remove("shrinking")
-            lessons.classList.add("expanding")
-        }
-        else if (lessons.classList.contains("expanding")) {
-            lessons.classList.add("shrinking")
-            lessons.classList.remove("expanding")
-        }
-    }
-    else {
-        const lessons = document.getElementById("lessons_mobile")
-        lessons.classList.remove("shrinking")
-        lessons.classList.add("expanding")
-    }
-}
-
-function close_lessons() {
-    const lessons = document.getElementById("lessons_mobile")
-        lessons.classList.add("shrinking")
-        lessons.classList.remove("expanding")
-}
-
-document.addEventListener("click", (e) => {
-    console.log(e.target.id)
-    console.log(e.target)
-    const lessons_desktop = document.getElementById("lessons_desktop")
-    const lessons_mobile = document.getElementById("lessons_mobile")
-    if (
-        e.target !== lessons_desktop && e.target !== lessons_mobile &&
-        (!lessons_desktop.contains(e.target) && e.target !== document.getElementById("open_lessons_desktop")) &&
-        ((!lessons_mobile.contains(e.target) || e.target) === document.getElementById("close_lessons_mobile"))
-    ) {
-        if (document.getElementById("lessons_desktop").classList.length !== 0) {
-            document.getElementById("lessons_desktop").classList.add("shrinking")
-        }
-        if (document.getElementById("lessons_mobile").classList.length !== 0) {
-            document.getElementById("lessons_mobile").classList.add("shrinking")
-        }
-        document.getElementById("open_lessons_desktop").innerText = "View lessons ❱"
-
-    }
-})
-
-
-async function input() {
-    let code = codeArea_desktop.getValue()
+async function input(platform) {
+    let code = variables['codeAreas'][platform]['input'].getValue()
     code = code.split("input")
     for (let part of code) {
         if (part.startsWith('(')) {
-            original_questions.push(part.split('(')[1].split(')')[0])
-            let results = await fetch("https://emkc.org/api/v2/piston/execute", {
-                method: 'POST',
-                body: JSON.stringify({
-                    "language": "python",
-                    "version": "3.9.4",
-                    "files": [{"name": "code.py", "content": `print(${part.split('(')[1].split(')')[0]})`}]
-                })
-            })
-            console.log(part)
-            console.log("using API")
-            results = await results.json()
-            questions.push(results['run']['stdout'].replace("\n", ""))
+            variables['original_statements'].push(part.split('(')[1].split(')')[0])
+            let results = await execute(`print(${part.split('(')[1].split(')')[0]})`)
+            variables['statements'].push(results['run']['stdout'].replace("\n", ""))
         }
     }
-    if (questions.length !== 0) {
-        let previousOutput = output.getValue()
-        output = createShell(previousOutput + '\n' + questions[0])
-        document.getElementById("right").children[3].remove()
-        console.log(output.getValue())
-        console.log(questions)
-        keyBindInput(output, questions[0])
+    if (variables['statements'].length !== 0) {
+        let previousOutput = variables['codeAreas'][platform]['output'].getValue()
+        changeShell(platform, previousOutput + '\n' + variables['statements'][0])
+        keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][0], platform)
     }
 }
 
-async function nextQuestion(question) {
-    let previousOutput = output.getValue()
-    if (questions.indexOf(question)+1 === questions.length) {
-        let code = codeArea_desktop.getValue()
+async function nextQuestion(question, platform) {
+    console.log(platform)
+    let previousOutput = variables['codeAreas'][platform]['output'].getValue()
+    if (variables['statements'].indexOf(question)+1 === variables['statements'].length) {
+        let code = variables['codeAreas'][platform]['input'].getValue()
         code = code.split("input")
-        console.log(code)
         for (let part of code) {
             if (part.startsWith('(')) {
                 let originalPart = `${part}`
-                console.log(part)
-                /*part = part.split(`${question}')`)
-                console.log(part)
-                part = part.join('')
-                part = part.split("\n")
-                part[0] = `"${input_responses[questions.indexOf(question)]}"`
-                console.log(part)*/
-                console.log(original_questions[questions.indexOf(question)])
-                console.log(input_responses[questions.indexOf(question)])
-                code[code.indexOf(originalPart)] = part.replace(`(${original_questions[questions.indexOf(question)]})`, `"${input_responses[questions.indexOf(question)]}"`)
+                code[code.indexOf(originalPart)] = part.replace(`(${variables['original_statements'][variables['statements'].indexOf(question)]})`, `"${variables['input_responses'][variables['statements'].indexOf(question)]}"`)
             }
         }
         code = code.join('')
-        console.log(code)
-        let results = await fetch("https://emkc.org/api/v2/piston/execute", {
-            method: 'POST',
-            body: JSON.stringify({
-                "language": "python",
-                "version": "3.9.4",
-                "files": [{"name": "code.py", "content": code}]
-            })
-        })
-        console.log("using API")
-        results = await results.json()
+        let results = await execute(code)
         console.log(results)
-        output = createShell(previousOutput + '\n' + results['run']['stdout'])
-        document.getElementById("right").children[3].remove()
-        input_responses = []
-        questions = []
-        original_questions = []
-        keyBind(output)
-        return await checkResults(results['run'], codeArea_desktop.getValue())
+        changeShell(platform, previousOutput + '\n' + results['run']['stdout'])
+        variables['input_responses'] = []
+        variables['statements'] = []
+        variables['original_statements'] = []
+        keyBind(variables['codeAreas'][platform]['output'])
+        return await checkResults(results['run'], variables['codeAreas'][platform]['input'].getValue())
     }
-    output = createShell(previousOutput + '\n' + questions[questions.indexOf(question)+1] + '\n>>> ')
-    document.getElementById("right").children[3].remove()
-    keyBindInput(output, questions[questions.indexOf(question)+1])
+    changeShell(platform, previousOutput + '\n' + variables['statements'][variables['statements'].indexOf(question)+1] + '\n>>> ')
+    keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][variables['statements'].indexOf(question)+1], platform)
 
 }
 
-function keyBindInput(editor, question) {
+function keyBindInput(editor, question, platform) {
     editor.setOption("extraKeys", {
         Enter: async () => {
             console.log(question)
@@ -416,34 +469,8 @@ function keyBindInput(editor, question) {
                 }
             }
             console.log(content)
-            input_responses.push(content)
-            await nextQuestion(question)
+            variables['input_responses'].push(content)
+            await nextQuestion(question, platform)
         }
     })
 }
-
-function select_tab(tab) {
-    let other_tab
-    if (tab === 'lesson') {
-        tab = document.getElementById('tab_mobile_lesson')
-        other_tab = document.getElementById('tab_mobile_code')
-        document.getElementById("page_lesson_mobile").style.display = "block"
-        document.getElementById("page_code_mobile").style.display = "none"
-    }
-    else {
-        tab = document.getElementById('tab_mobile_code')
-        other_tab = document.getElementById('tab_mobile_lesson')
-        document.getElementById("page_lesson_mobile").style.display = "none"
-        document.getElementById("page_code_mobile").style.display = "flex"
-    }
-    tab.classList.add("selected")
-    tab.classList.remove("deselected")
-    other_tab.classList.add("deselected")
-    other_tab.classList.remove("selected")
-}
-
-// When the page first loads, make the code check if there is already the key "lesson" in localstorage.
-// If not, it creates one `"lesson": "intro"`
-// It then passes it to the endpoint in the python
-// When the user signs up for an account, it checks the localstorage to see if they have made progress.
-// If they have, instead of setting their current lesson to "intro", it sets it to the one in localstorage.
