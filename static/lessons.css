@@ -281,6 +281,7 @@ h1 {
     animation: select 0.3s;
     animation-fill-mode: forwards;
     animation-timing-function: linear;
+    color: #77b590;
 }
 
 #tabs_mobile .deselected {
@@ -379,4 +380,12 @@ html {overflow: hidden}
         animation-fill-mode: forwards;
         animation-timing-function: linear;
     }
+}
+
+#jump_to_code {
+    color: #1DC116;
+    font: 400 22px Roboto;
+    cursor: pointer;
+    text-align: center;
+
 }

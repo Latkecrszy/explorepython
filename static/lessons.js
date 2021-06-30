@@ -96,10 +96,9 @@ async function createDesktop() {
 // Create the mobile version of the website
 async function createMobile() {
     // Create the lesson content
-    console.log(document.getElementsByTagName("div"))
-    console.log(document.getElementById("lesson_page_mobile\""))
     document.getElementById("lesson_page_mobile\"").innerHTML = variables['lesson_info']['lesson']
-
+    // Add the jump to code section text
+    document.getElementById("lesson_page_mobile\"").innerHTML += "<p id='jump_to_code' onclick=switchTab('code')>Go to Code</p>"
     // Create the editor
     variables['codeAreas']['mobile']['input'] = CodeMirror(document.getElementById("code_page_mobile"), {
         value: variables['lesson_info']['code'],
@@ -161,7 +160,7 @@ async function createMobile() {
 // Add content to the lessons menu
 function addLessonsContent() {
     // Iterate through the lesson names
-    for (let lessonName in lessons_to_nums) {
+    for (const lessonName in lessons_to_nums) {
         // Create a lesson div
         let newLesson = document.createElement("div")
         newLesson.classList.add("nav_lesson")
@@ -204,21 +203,17 @@ function hideLessons() {
 
 // Execute code and return the output
 async function execute(code) {
-    let results = await fetch("https://emkc.org/api/v2/piston/execute", {
+    const results = await fetch("https://emkc.org/api/v2/piston/execute", {
         method: 'POST',
         body: JSON.stringify({"language": "python", "version": "3.9.4", "files": [{"name": "main.py", "content": code}]})})
-    results = await results.json()
-    console.log(results)
-    return results
+    return await results.json()
 }
 
 
 // Change the content of the shell editor
-function changeShell(platform, content, create) {
+function changeShell(platform, content, create = false) {
     let output
-    console.log(platform)
     if (platform === 'desktop') {
-        console.log("desktop")
         // Recreate the codeArea on the desktop version
         output = CodeMirror(document.getElementById("right"), {
             value: content,
@@ -242,8 +237,7 @@ function changeShell(platform, content, create) {
         )
         output.setSize(window.innerWidth, window.innerHeight/2.57)
     }
-    console.log(create)
-    if (create === undefined) {
+    if (!create) {
         if (platform === 'desktop') {
             document.getElementById("right").children[3].remove()
         }
@@ -252,8 +246,6 @@ function changeShell(platform, content, create) {
         }
 
     }
-    console.log(output)
-    console.log(platform)
     keyBind(output, platform)
     variables['codeAreas'][platform]['output'] = output
 }
@@ -282,36 +274,42 @@ function switchTab(tab) {
     other_tab.classList.remove("selected")
 }
 
+// TODO: Make a compiling notification for when the code is running
+// TODO: Make a compiling notification for when the code is running
+// TODO: Make a compiling notification for when the code is running
+// TODO: Make a compiling notification for when the code is running
+// TODO: Make a compiling notification for when the code is running
 
 // Listener for the run button
 async function run(event) {
     let platform
-    console.log(event.target.id)
+    // Define the platform
     event.target.id === 'run_desktop' ? platform = 'desktop' : platform = 'mobile'
+    // Grab the code from the codeArea
     let code = variables['codeAreas'][platform]['input'].getValue()
+    // Handle input statements
     if (code.includes("input(")) {
         return input(platform)
     }
+    // Run the code
     let results = await execute(code)
-    console.log(results)
+    // Show their output
     let previousOutput = variables['codeAreas'][platform]['output'].getValue()
     changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+    // Check their results
     await checkResults(results['run'], code)
 }
 
 
 // Check the results of their code
 async function checkResults(results, code) {
-    let expected_output = variables['expected_output']
+    const expected_output = variables['expected_output']
     if (results['stderr'] !== '') {
-        console.log("error")
         let newResults = results['stderr'].split("line")[0]
         newResults = results['stderr'].replace(newResults, '')
         return await send_notif("error", `Error: \n${newResults}\nTry again!`)
     }
     if (!results['stdout'].match(expected_output['output'])) {
-        console.log("Incorrect output")
-        console.log(results['stdout'])
         if (results['stdout'] === '\n') {
             return await send_notif("incorrect_output", `Incorrect output. Try again!`)
         }
@@ -321,25 +319,19 @@ async function checkResults(results, code) {
     if (expected_output['input']['excludes'].some(item => results['stdout'].match(item))) {
         return await send_notif("incorrect_input", `You got the right result, but your code uses a method that is not allowed. Try again!`)
     }
-    for (let i of expected_output['input']['includes']) {
+    for (const i of expected_output['input']['includes']) {
         if (i === "'") {
-            i = ["'", '"']
-            console.log(i)
-            console.log(i.some(item => code.includes(item)))
-            if (!i.some(item => code.includes(item))) {
-                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
+            if (!["'", '"'].some(item => code.includes(item))) {
+                await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
         else {
             if (!code.includes(i)) {
-                console.log("Incorrect input")
-                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`)
+                await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
     }
-
-    console.log("Correct")
-    let response = responses[Math.floor(Math.random()*responses.length)];
+    const response = responses[Math.floor(Math.random()*responses.length)];
     document.getElementById("next_desktop").classList.add("valid")
     document.getElementById("next_mobile").classList.add("valid")
     return await send_notif("correct", `${response} Click Next to continue!`)
@@ -411,7 +403,7 @@ function changeLesson(direction, platform) {
 async function input(platform) {
     let code = variables['codeAreas'][platform]['input'].getValue()
     code = code.split("input")
-    for (let part of code) {
+    for (const part of code) {
         if (part.startsWith('(')) {
             variables['original_statements'].push(part.split('(')[1].split(')')[0])
             let results = await execute(`print(${part.split('(')[1].split(')')[0]})`)
