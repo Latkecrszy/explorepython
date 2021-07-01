@@ -18,6 +18,7 @@ header {
     align-items: center;
     width: calc(100vw - 20px);
     height: 75px;
+    flex-wrap: wrap;
 }
 
 .get_started {
