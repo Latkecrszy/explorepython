@@ -5,7 +5,7 @@ html, body {
     overflow-x: hidden
 }
 
-p, h1, h2, h3, h4, h5 {color: white; font-family: Roboto}
+p, h1, h2, h3, h4, h5 {color: white; font-family: Lato}
 
 @media (max-width: 730px) {
     #hamburger {
@@ -26,7 +26,7 @@ p, h1, h2, h3, h4, h5 {color: white; font-family: Roboto}
 }
 
 /*Hamburger Menu*/
-#hamburger {cursor: pointer; margin: 25px 30px 0 auto;}
+#hamburger {cursor: pointer; margin-left: auto;}
 
 #hamburger_dropdown.expand {display: flex; margin-left: auto}
 
@@ -65,4 +65,16 @@ p, h1, h2, h3, h4, h5 {color: white; font-family: Roboto}
 .expand #line3 {
     -webkit-transform: rotate(45deg) translate(-8px, -8px);
     transform: rotate(45deg) translate(-8px, -8px);
+}
+
+.run {
+    background: #10cc5b;
+    width: 100px;
+    height: 50px;
+    border: none;
+    border-radius: 2px;
+    font: 400 18px Lato;
+    box-shadow: 3px 3px 5px black;
+    margin-left: calc(100% - 107px);
+    cursor: pointer;
 }

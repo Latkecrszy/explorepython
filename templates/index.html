@@ -7,15 +7,19 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename='theme_home.css') }}"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
         <script async src="https://arc.io/widget.min.js#DAoRpT6R"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="title" content="ExplorePython">
-        <meta name="description" content="ExplorePython is a fun, interactive way to learn python. With bite sized mini-lessons and comprehension tests, using ExplorePython guarantees a lot of learning!">
+        <meta name="description" content="ExplorePython is a fun, interactive way to learn and explore the Python language. With bite sized mini-lessons and comprehension tests, using ExplorePython guarantees a lot of learning!">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body>
         <header>
@@ -30,19 +34,34 @@
                         <div id="line3"></div>
                     </div>
                     <div id="hamburger_dropdown">
-                        <a href="/lessons">Get Started</a>
-                        <a href="/login">Log In</a>
-                        <a href="/signup" class="header_signup">Sign Up</a>
+                        <a href="/lessons" class="get_started">Get Started</a>
                     </div>
                 </div>
-                <a href="/lessons">Get Started</a>
-                <a href="/login">Log In</a>
-                <a href="/signup" class="header_signup">Sign Up</a>
+                <a href="/lessons" class="get_started">Get Started</a>
             </div>
         </header>
+        <div id="page">
+            <div id="left">
+                <div id="blurb">
+                    <h1>ExplorePython</h1>
+                    ExplorePython is an interactive, fun way to learn and explore the Python language.
+                    With bite sized mini-lessons on topics from variables to Object Oriented Programming,
+                    ExplorePython provides the tools that every budding developer needs to succeed.
+                    After each lesson, you'll get the chance to test your knowledge by writing and running
+                    code relating to the topic you just learned.
+                    You then have your solution evaluated on the spot before moving on.
+                </div>
+            </div>
+            <div id="right"></div>
+        </div>
 
     </body>
-    <script>
-        document.addEventListener("click", x => {if (x.target.matches("#hamburger") || x.target.matches("#line1") || x.target.matches("#line2") || x.target.matches("#line3")) {document.getElementById("hamburger").classList.toggle("expand"); document.getElementById("hamburger_dropdown").classList.toggle("expand")}})
-    </script>
+    <script src="{{ url_for('static', filename='lessons.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 </html>
+<!--ExplorePython is an interactive, fun way to learn and explore the Python language.
+                    With bite sized mini-lessons on topics from variables to Object Oriented Programming,
+                    ExplorePython provides the tools that every budding developer needs to succeed.
+                    After each lesson, you'll get the chance to test your knowledge by writing and running
+                    code relating to the topic you just learned.
+                    You then have your solution evaluated on the spot before moving on.-->

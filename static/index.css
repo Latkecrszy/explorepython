@@ -1,5 +1,79 @@
 #logo_text {
-    font-size: 30px
+    font: 400 35px Lato;
 }
 
-body {margin-left: 20px}
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: visible !important;
+}
+
+header {
+    margin: 10px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: calc(100vw - 20px);
+    height: 75px;
+}
+
+.get_started {
+    text-decoration: none;
+    font: 400 20px Lato;
+    color: white;
+    border-radius: 10px;
+    border: 3px solid #10cc5b;
+    padding: 11px;
+    background: none;
+    transition: 0.5s
+}
+
+.get_started:hover {
+    background: #10cc5b;
+}
+
+#page {
+    display: flex;
+    overflow: visible;
+}
+
+#left {
+    width: calc(50vw - 40px);
+    margin: 50px 0 0 40px;
+    height: 100%;
+}
+
+#right {
+    width: calc(50vw - 40px);
+    margin: 50px 40px 0 0;
+    height: 100%;
+}
+
+#blurb {
+    margin-left: 40px;
+    color: white;
+    font: 400 22px Lato;
+    width: 85%;
+    line-height: 30px
+}
+
+h1 {
+    line-height: 45px
+}
+
+@media (max-width: 900px) {
+    #page {flex-direction: column}
+    #left {width: calc(100vw - 40px);}
+    #right {width: calc(100vw - 40px);}
+    .cm-s-theme.CodeMirror {
+        width: 95vw !important
+    }
+}
+
+#run {
+    z-index: 5
+}
+

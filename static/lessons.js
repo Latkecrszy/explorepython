@@ -282,6 +282,8 @@ function switchTab(tab) {
 
 // Listener for the run button
 async function run(event) {
+    send_notif("loading", "Running code...")
+    await sleep(800)
     let platform
     // Define the platform
     event.target.id === 'run_desktop' ? platform = 'desktop' : platform = 'mobile'
@@ -295,7 +297,8 @@ async function run(event) {
     let results = await execute(code)
     // Show their output
     let previousOutput = variables['codeAreas'][platform]['output'].getValue()
-    changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+    variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+    //changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     // Check their results
     await checkResults(results['run'], code)
 }
@@ -346,7 +349,7 @@ function keyBind(editor, platform) {
             content = splitContent[content.split(">>> ").length-1]
             let results = await execute(content)
             let previousOutput = variables['codeAreas'][platform]['output'].getValue()
-            changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+            variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
         }
     })
 }
@@ -354,6 +357,8 @@ function keyBind(editor, platform) {
 
 async function send_notif(status, text) {
     let notif = document.getElementById("notif_desktop")
+    notif.style.display = "none"
+    notif.style.opacity = "0"
     if (status === "correct") {
         notif.style.border = "3px solid #22e325"
     }
@@ -362,6 +367,9 @@ async function send_notif(status, text) {
     }
     else if (status === "error") {
         notif.style.border = "3px solid #f53520"
+    }
+    else if (status === "loading") {
+        notif.style.border = "3px solid #a9c916"
     }
     notif.innerText = text
     notif.style.display = "block"
@@ -412,7 +420,7 @@ async function input(platform) {
     }
     if (variables['statements'].length !== 0) {
         let previousOutput = variables['codeAreas'][platform]['output'].getValue()
-        changeShell(platform, previousOutput + '\n' + variables['statements'][0])
+        variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + variables['statements'][0])
         keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][0], platform)
     }
 }
@@ -432,14 +440,14 @@ async function nextQuestion(question, platform) {
         code = code.join('')
         let results = await execute(code)
         console.log(results)
-        changeShell(platform, previousOutput + '\n' + results['run']['stdout'])
+        variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + results['run']['stdout'])
         variables['input_responses'] = []
         variables['statements'] = []
         variables['original_statements'] = []
         keyBind(variables['codeAreas'][platform]['output'])
         return await checkResults(results['run'], variables['codeAreas'][platform]['input'].getValue())
     }
-    changeShell(platform, previousOutput + '\n' + variables['statements'][variables['statements'].indexOf(question)+1] + '\n>>> ')
+    variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + variables['statements'][variables['statements'].indexOf(question)+1] + '\n>>> ')
     keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][variables['statements'].indexOf(question)+1], platform)
 
 }
