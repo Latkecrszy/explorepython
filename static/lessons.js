@@ -283,7 +283,6 @@ function switchTab(tab) {
 // Listener for the run button
 async function run(event) {
     send_notif("loading", "Running code...")
-    await sleep(800)
     let platform
     // Define the platform
     event.target.id === 'run_desktop' ? platform = 'desktop' : platform = 'mobile'
@@ -325,12 +324,12 @@ async function checkResults(results, code) {
     for (const i of expected_output['input']['includes']) {
         if (i === "'") {
             if (!["'", '"'].some(item => code.includes(item))) {
-                await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
+                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
         else {
             if (!code.includes(i)) {
-                await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
+                return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
     }

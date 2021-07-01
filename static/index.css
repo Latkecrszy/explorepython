@@ -44,6 +44,8 @@ header {
     width: calc(50vw - 40px);
     margin: 50px 0 0 40px;
     height: 100%;
+    display: flex;
+    flex-direction: column
 }
 
 #right {
@@ -66,14 +68,38 @@ h1 {
 
 @media (max-width: 900px) {
     #page {flex-direction: column}
-    #left {width: calc(100vw - 40px);}
+    #left {width: calc(100vw - 40px); margin-left: 20px}
     #right {width: calc(100vw - 40px);}
     .cm-s-theme.CodeMirror {
         width: 95vw !important
     }
+    #run {
+        top: calc(430px + max(250px, calc(100% / 2.7))) !important
+    }
+
 }
 
+@media (max-width: 800px) {#run {top: calc(475px + max(250px, calc(100% / 2.7))) !important}}
+
+@media (max-width: 695px) {#run {top: calc(510px + max(250px, calc(100% / 2.7))) !important}}
+
+@media (max-width: 516px) {#run {top: calc(540px + max(250px, calc(100% / 2.7))) !important}}
+
+@media (max-width: 471px) {#run {top: calc(570px + max(250px, calc(100% / 2.7))) !important}}
+
+@media (max-width: 400px) {#left {margin-left: 0}}
+
 #run {
-    z-index: 5
+    z-index: 7;
+    position: absolute;
+    right: 44px;
+    top: calc(88px + max(250px, calc(100vh / 2.7)))
+}
+
+#get_started {
+    margin: 40px 0 0 50px;
+    background: #10cc5b;
+    width: 125px;
+    font-size: 24px;
 }
 

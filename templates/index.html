@@ -27,34 +27,21 @@
                 <p id="logo_text">ExplorePython</p>
             </div>
             <div id="links">
-                <div id="dropdown">
-                    <div id="hamburger">
-                        <div id="line1"></div>
-                        <div id="line2"></div>
-                        <div id="line3"></div>
-                    </div>
-                    <div id="hamburger_dropdown">
-                        <a href="/lessons" class="get_started">Get Started</a>
-                    </div>
-                </div>
                 <a href="/lessons" class="get_started">Get Started</a>
             </div>
         </header>
         <div id="page">
             <div id="left">
                 <div id="blurb">
-                    <h1>ExplorePython</h1>
-                    ExplorePython is an interactive, fun way to learn and explore the Python language.
-                    With bite sized mini-lessons on topics from variables to Object Oriented Programming,
-                    ExplorePython provides the tools that every budding developer needs to succeed.
-                    After each lesson, you'll get the chance to test your knowledge by writing and running
-                    code relating to the topic you just learned.
-                    You then have your solution evaluated on the spot before moving on.
+                    <h1>Learn Python, by writing python.</h1>
+                    Everyone knows that the best way to learn is by doing.
+                    That's why ExplorePython provides an interactive experience to help beginners explore the Python language.
                 </div>
+                <a href="/lessons" class="get_started" id="get_started">Get Started</a>
             </div>
             <div id="right"></div>
         </div>
-
+    <button id="run" class="run" onclick="runHome()">Run ❯</button>
     </body>
     <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

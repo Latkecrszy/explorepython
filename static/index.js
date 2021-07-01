@@ -1,12 +1,11 @@
-document.addEventListener("click", x => {if (x.target.matches("#hamburger") || x.target.matches("#line1") || x.target.matches("#line2") || x.target.matches("#line3")) {document.getElementById("hamburger").classList.toggle("expand"); document.getElementById("hamburger_dropdown").classList.toggle("expand")}})
-
-const home_variables = {
+// Centralize editor variables
+const editors = {
     input: null,
     output: null
 }
 
-
-home_variables['input'] = CodeMirror(document.getElementById("right"), {
+// Create the editor to write code
+editors['input'] = CodeMirror(document.getElementById("right"), {
     value: `import random
 greetings = ['Welcome to ExplorePython!', 'Glad to have you at ExplorePython!']
 class ExplorePython:
@@ -25,8 +24,8 @@ explore_python = E`,
     lineWrapping: true
 })
 
-
-home_variables['output'] = CodeMirror(document.getElementById("right"), {
+// Create the editor to output code
+editors['output'] = CodeMirror(document.getElementById("right"), {
     value: ">>> ",
     mode: "python",
     lineNumbers: true,
@@ -35,33 +34,37 @@ home_variables['output'] = CodeMirror(document.getElementById("right"), {
     lineWrapping: true
 })
 
-home_variables['input'].setSize(window.innerWidth / 2.2, window.innerHeight / 2.7)
-home_variables['output'].setSize(window.innerWidth / 2.2, window.innerHeight / 3)
+// Set the sizes of the editors
+editors['input'].setSize(window.innerWidth / 2.2, Math.max(250, window.innerHeight / 2.7))
+editors['output'].setSize(window.innerWidth / 2.2, window.innerHeight / 3)
 
-const runButton = document.createElement("button")
-runButton.addEventListener("click", (e) => run(e))
-runButton.id = "run"
-runButton.classList.add("run")
-runButton.innerText = "Run ❯"
-document.getElementById("right").children[0].appendChild(runButton)
 write()
+
+
 async function write() {
     let complete = "xplorePython(greetings)\nexplore_python.welcome()"
     let newText
     while (complete !== "") {
-        newText = home_variables['input'].getValue()
+        newText = editors['input'].getValue()
         newText += complete[0]
         complete = complete.substring(1)
-        home_variables['input'].setValue(newText)
+        editors['input'].setValue(newText)
         await sleep(75)
     }
-    home_variables['input'].focus()
-    home_variables['input'].setCursor({
+    editors['input'].focus()
+    editors['input'].setCursor({
              line: 11,
              ch: 24,
            });
     await sleep(500)
-    const results = await execute(home_variables['input'].getValue())
-    home_variables['output'].setValue(results['run']['stdout']+results['run']['stderr']+'>>> ')
+    const results = await execute(editors['input'].getValue())
+    editors['output'].setValue(results['run']['stdout']+results['run']['stderr']+'>>> ')
 }
 
+async function runHome() {
+    console.log("doing")
+    const results = await execute(editors['input'].getValue())
+    console.log(results['run']['output'])
+    editors['output'].setValue(editors['output'].getValue()+'\n'+results['run']['output']+'>>> ')
+    console.log("done")
+}

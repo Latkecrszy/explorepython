@@ -4,6 +4,7 @@
     background: #1f2b40;
     color: #D1EDFF;
     border-bottom: 8px solid #0F192A;
+    width: 100% !important;
 }
 
 .cm-s-theme div.CodeMirror-selected { background: #314D67; }
