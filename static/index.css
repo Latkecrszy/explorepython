@@ -10,7 +10,7 @@ body {
 }
 
 header {
-    margin: 10px;
+    margin: 0 10px 10px 10px;
     padding: 0 15px;
     box-sizing: border-box;
     display: flex;
@@ -74,35 +74,21 @@ h1 {
     top: calc(88px + max(250px, calc(100vh / 2.7)))
 }
 
-@media (max-width: 900px) {
-    #front_page {flex-direction: column}
-    #left {width: calc(100vw - 40px); margin-left: 20px}
-    #right {width: calc(100vw - 40px);}
-    .cm-s-theme.CodeMirror {
-        width: 95vw !important
-    }
-    #run {
-        z-index: 7;
-        position: relative;
-        top: 45%;
-        right: 0;
-    }
-
-}
-
 #buttons {
-    margin: 40px 0 0 50px
+    margin: 40px 0 0 50px;
+    display: flex;
+    flex-wrap: wrap
 }
 
 .get_started_page {
     background: #10cc5b;
     width: 125px;
     font-size: 24px;
+    margin: 15px 10px 0 0
 }
 
 #learn_more_button {
     background: none;
-    margin-left: 10px
 }
 
 #learn_more_button:hover {
@@ -165,19 +151,13 @@ h1 {
     width: 45px;
 }
 
-@media (max-width: 900px) {
-    .perk_row {
-        height: 400px;
-    }
-}
-
 @media (max-width: 750px) {
     .perk_row {
         flex-direction: column;
         height: fit-content;
     }
     .perk {
-        margin: 20px;
+        margin: 20px 0;
         width: 90%;
     }
     .perk:hover {
@@ -190,6 +170,25 @@ h1 {
     #learn_more {
         margin-top: 200px
     }
+}
+
+@media (max-width: 900px) {
+    #front_page {flex-direction: column}
+    #left {width: calc(100vw - 40px); margin-left: 20px}
+    #right {width: calc(100vw - 40px);}
+    .cm-s-theme.CodeMirror {
+        width: 95vw !important
+    }
+    #run {
+        z-index: 7;
+        position: relative;
+        top: 45%;
+        right: 0;
+    }
+    .perk_row {
+        height: 400px;
+    }
+
 }
 
 
