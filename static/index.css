@@ -67,6 +67,13 @@ h1 {
     line-height: 45px
 }
 
+#run {
+    z-index: 7;
+    position: absolute;
+    right: 44px;
+    top: calc(88px + max(250px, calc(100vh / 2.7)))
+}
+
 @media (max-width: 900px) {
     #front_page {flex-direction: column}
     #left {width: calc(100vw - 40px); margin-left: 20px}
@@ -75,26 +82,12 @@ h1 {
         width: 95vw !important
     }
     #run {
-        top: calc(430px + max(250px, calc(100% / 2.7))) !important
+        z-index: 7;
+        position: relative;
+        top: 45%;
+        right: 0;
     }
 
-}
-
-@media (max-width: 800px) {#run {top: calc(475px + max(250px, calc(100% / 2.7))) !important}}
-
-@media (max-width: 695px) {#run {top: calc(510px + max(250px, calc(100% / 2.7))) !important}}
-
-@media (max-width: 516px) {#run {top: calc(540px + max(250px, calc(100% / 2.7))) !important}}
-
-@media (max-width: 471px) {#run {top: calc(570px + max(250px, calc(100% / 2.7))) !important}}
-
-@media (max-width: 400px) {#left {margin-left: 0}}
-
-#run {
-    z-index: 7;
-    position: absolute;
-    right: 44px;
-    top: calc(88px + max(250px, calc(100vh / 2.7)))
 }
 
 #buttons {
@@ -168,8 +161,8 @@ h1 {
 }
 
 .perk img {
-    height: 40px;
-    width: 40px;
+    height: 45px;
+    width: 45px;
 }
 
 @media (max-width: 900px) {

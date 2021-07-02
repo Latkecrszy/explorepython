@@ -41,12 +41,15 @@
                 </div>
                 <div id="buttons">
                     <a href="/lessons" class="get_started get_started_page" id="get_started">Get Started</a>
-                    <a href="#learn_more" class="get_started get_started_page" id="learn_more_button">Learn More</a>
+                    <a onclick="document.getElementById('scroll_to').scrollIntoView()" class="get_started get_started_page" id="learn_more_button">Learn More</a>
                 </div>
 
             </div>
-            <div id="right"></div>
+            <div id="right">
+                <button id="run" class="run" onclick="runHome()">Run ❯</button>
+            </div>
         </div>
+        <div id="scroll_to"></div>
         <div id="learn_more">
             <div class="first_message">
                 <h1>What is ExplorePython?</h1>
@@ -62,7 +65,7 @@
             <div id="perks">
                 <div class="perk_row">
                     <div class="perk">
-                        <img src="{{ url_for('static', filename='icons/graduation-cap-solid.svg') }}" alt="file">
+                        <img src="{{ url_for('static', filename='icons/student_chalkboard.svg') }}" alt="file">
                         <h3>Self Paced</h3>
                         <p>
                             There are no deadlines or rushed assignments, everything is at your own speed.
@@ -70,24 +73,24 @@
                         </p>
                     </div>
                     <div class="perk">
-                        <img src="{{ url_for('static', filename='icons/file-alt-regular.svg') }}" alt="file">
+                        <img src="{{ url_for('static', filename='icons/file.svg') }}" alt="file">
                         <h3>Bite-Sized Lessons</h3>
                         <p>Instead of scrolling through mountains of text for every lesson, you can learn a new topic
                             in a matter of minutes with small, digestible lessons explaining the topic simply and concisely.
                         </p>
                     </div>
                     <div class="perk">
-                        <img src="{{ url_for('static', filename='icons/user-edit-solid.svg') }}" alt="file">
+                        <img src="{{ url_for('static', filename='icons/student_pen.svg') }}" alt="file">
                         <h3>Comprehension Tests</h3>
-                        <p>After every lesson, you get to test out what you've learned.
+                        <p>At the end of every lesson, you get to test out what you've learned.
                             This helps with comprehension, retention, and lets you explore the language your way.
                         </p>
                     </div>
                 </div>
                 <div class="perk_row">
                     <div class="perk">
-                        <img src="{{ url_for('static', filename='icons/terminal-solid.svg') }}" alt="file">
-                        <h3>Do Things Your Way</h3>
+                        <img src="{{ url_for('static', filename='icons/terminal.svg') }}" alt="file">
+                        <h3>Everything Your Way</h3>
                         <p>
                             No structured assignments here, instead you'll be showing your knowledge with small projects,
                             where you're given a problem and have to find a solution using what you've just learned.
@@ -95,18 +98,27 @@
                         </p>
                     </div>
                     <div class="perk">
-                        <img src="{{ url_for('static', filename='icons/code-solid.svg') }}" alt="file">
+                        <img src="{{ url_for('static', filename='icons/code.svg') }}" alt="file">
                         <h3>Instant Evaluation</h3>
                         <p>
                             When you finish writing your code for the lesson, there's no turn in button - just run and be done!
                             If it's correct, you'll be able to move on, and if not, you'll be told exactly what went wrong.
-                            No waiting for instructor feedback, you get to move at completely your own speed.
+                            No waiting for instructor feedback, you get to move completely at your own speed.
+                        </p>
+                    </div>
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/keyboard.svg') }}" alt="file">
+                        <h3>Real Coding</h3>
+                        <p>
+                            Many introductory coding platforms solely teach programming concepts and ideas without
+                            introducing real world applications or actual languages. ExplorePython
+                            is built as a direct learning tool, where you can keep coding on your own after the course
+                            is finished.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-    <button id="run" class="run" onclick="runHome()">Run ❯</button>
     </body>
     <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
