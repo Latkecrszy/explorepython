@@ -20,6 +20,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/codemirror.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://kit.fontawesome.com/17a232a608.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <header>
@@ -57,6 +58,52 @@
                     code relating to the topic you just learned.
                     You then have your solution evaluated on the spot before moving on.
                 </p>
+            </div>
+            <div id="perks">
+                <div class="perk_row">
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/graduation-cap-solid.svg') }}" alt="file">
+                        <h3>Self Paced</h3>
+                        <p>
+                            There are no deadlines or rushed assignments, everything is at your own speed.
+                            You can take a break for weeks or finish it all in a day, however you learn best!
+                        </p>
+                    </div>
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/file-alt-regular.svg') }}" alt="file">
+                        <h3>Bite-Sized Lessons</h3>
+                        <p>Instead of scrolling through mountains of text for every lesson, you can learn a new topic
+                            in a matter of minutes with small, digestible lessons explaining the topic simply and concisely.
+                        </p>
+                    </div>
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/user-edit-solid.svg') }}" alt="file">
+                        <h3>Comprehension Tests</h3>
+                        <p>After every lesson, you get to test out what you've learned.
+                            This helps with comprehension, retention, and lets you explore the language your way.
+                        </p>
+                    </div>
+                </div>
+                <div class="perk_row">
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/terminal-solid.svg') }}" alt="file">
+                        <h3>Do Things Your Way</h3>
+                        <p>
+                            No structured assignments here, instead you'll be showing your knowledge with small projects,
+                            where you're given a problem and have to find a solution using what you've just learned.
+                            There's no pressure to do things a certain way, just however you're most comfortable.
+                        </p>
+                    </div>
+                    <div class="perk">
+                        <img src="{{ url_for('static', filename='icons/code-solid.svg') }}" alt="file">
+                        <h3>Instant Evaluation</h3>
+                        <p>
+                            When you finish writing your code for the lesson, there's no turn in button - just run and be done!
+                            If it's correct, you'll be able to move on, and if not, you'll be told exactly what went wrong.
+                            No waiting for instructor feedback, you get to move at completely your own speed.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     <button id="run" class="run" onclick="runHome()">Run ❯</button>

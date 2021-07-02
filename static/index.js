@@ -51,11 +51,6 @@ async function write() {
         editors['input'].setValue(newText)
         await sleep(75)
     }
-    editors['input'].focus()
-    editors['input'].setCursor({
-             line: 11,
-             ch: 24,
-           });
     await sleep(500)
     const results = await execute(editors['input'].getValue())
     editors['output'].setValue('>>> \n'+results['run']['stdout']+results['run']['stderr']+'>>> ')
