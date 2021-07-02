@@ -58,7 +58,7 @@ async function write() {
            });
     await sleep(500)
     const results = await execute(editors['input'].getValue())
-    editors['output'].setValue(results['run']['stdout']+results['run']['stderr']+'>>> ')
+    editors['output'].setValue('>>> \n'+results['run']['stdout']+results['run']['stderr']+'>>> ')
 }
 
 async function runHome() {

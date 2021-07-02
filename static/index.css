@@ -36,7 +36,7 @@ header {
     background: #10cc5b;
 }
 
-#page {
+#front_page {
     display: flex;
     overflow: visible;
 }
@@ -68,7 +68,7 @@ h1 {
 }
 
 @media (max-width: 900px) {
-    #page {flex-direction: column}
+    #front_page {flex-direction: column}
     #left {width: calc(100vw - 40px); margin-left: 20px}
     #right {width: calc(100vw - 40px);}
     .cm-s-theme.CodeMirror {
@@ -97,10 +97,41 @@ h1 {
     top: calc(88px + max(250px, calc(100vh / 2.7)))
 }
 
-#get_started {
-    margin: 40px 0 0 50px;
+#buttons {
+    margin: 40px 0 0 50px
+}
+
+.get_started_page {
     background: #10cc5b;
     width: 125px;
     font-size: 24px;
+}
+
+#learn_more_button {
+    background: none;
+    margin-left: 10px
+}
+
+#learn_more_button:hover {
+    background: #10cc5b;
+}
+
+#learn_more {
+    align-self: center;
+    text-align: center;
+    width: 60%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.first_message h1 {
+    font-size: 45px
+}
+.first_message p {
+    font-size: 24px
 }
 

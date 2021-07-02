@@ -5,7 +5,9 @@
     color: #D1EDFF;
     border-bottom: 8px solid #0F192A;
     width: 100% !important;
+    border-radius: 5px
 }
+
 
 .cm-s-theme div.CodeMirror-selected { background: #314D67; }
 .cm-s-theme .CodeMirror-line::selection, .cm-s-theme .CodeMirror-line > span::selection, .cm-s-theme .CodeMirror-line > span > span::selection { background: rgba(49, 77, 103, .99); }
