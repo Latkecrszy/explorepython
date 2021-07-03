@@ -8,7 +8,7 @@ For example, `20` is an integer, but `20.5` is a float.
 
 ## Can a whole number be a float?
 Absolutely. `20` may be an integer, but `20.0` is a perfectly valid float. 
-This is true for any integer, adding `.0` onto the end of it turns it into a float.
+This is true for any integer - adding `.0` onto the end of it turns it into a float.
 However, decimals can never be integers. There is no way to turn `20.5` into an integer without rounding up or down.
 
 ## How do I round a number in Python?

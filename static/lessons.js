@@ -398,15 +398,6 @@ function changeLesson(direction, platform) {
             return
         }
         nextLesson = lessons_to_nums[variables['lesson']]+1
-        let answers
-        if (!localStorage.getItem('answers')) {
-            answers = {}
-        }
-        else {
-            answers = JSON.parse(localStorage.getItem('answers'))
-        }
-        answers[variables['lesson']] = variables['codeAreas'][platform]['input'].getValue()
-        localStorage.setItem('answers', JSON.stringify(answers))
     }
     else if (direction === 'back') {
         if (document.getElementById(`back_${platform}`).classList.contains("invalid")) {
@@ -417,6 +408,15 @@ function changeLesson(direction, platform) {
     if (nextLesson > lessons_to_nums[variables['last_lesson']]) {
         localStorage.setItem("last_lesson", nums_to_lessons[nextLesson])
     }
+    let answers
+    if (!localStorage.getItem('answers')) {
+        answers = {}
+    }
+    else {
+        answers = JSON.parse(localStorage.getItem('answers'))
+    }
+    answers[variables['lesson']] = variables['codeAreas'][platform]['input'].getValue()
+    localStorage.setItem('answers', JSON.stringify(answers))
     localStorage.setItem("lesson", nums_to_lessons[nextLesson])
     location.reload()
 }
