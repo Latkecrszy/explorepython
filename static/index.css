@@ -92,6 +92,7 @@ h1 {
 
 #learn_more_button {
     background: none;
+    cursor: pointer;
 }
 
 #learn_more_button:hover {
@@ -143,13 +144,13 @@ h1 {
     height: fit-content;
     cursor: pointer;
     min-height: 220px;
-    display: table-cell;
+    display: table-cell
 }
 
-.perk p {width: calc(calc(30vw * 0.8) * 0.9); margin-left: calc(calc(calc(30vw * 0.8) * 0.9) * 0.01)}
 
 .perk:hover {
     padding: 20px;
+
 }
 
 .perk img {
@@ -190,5 +191,13 @@ h1 {
     }
 }
 
+#get_started_bottom {
+    margin: 20px 0 100px 0;
+    width: 200px;
+    height: 75px;
+    font-size: 30px;
+    background: #10cc5b;
+    cursor: pointer
+}
 
 

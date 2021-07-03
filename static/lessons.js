@@ -45,16 +45,23 @@ Functions to handle input builtin
  */
 
 // Create the desktop version of the website
-async function createDesktop() {
+const createDesktop = async () => {
     // Get the lesson, code example, and expected output from the API
+    if (variables['lesson'] === null) {variables['lesson'] = 'intro'}
+    if (variables['last_lesson'] === null) {variables['last_lesson'] = 'intro'}
     const lesson_info = await (await fetch(`/lesson?name=${variables['lesson']}`)).json()
     variables['lesson_info'] = lesson_info
     variables['expected_output'] = lesson_info['expected_output']
     document.getElementById("left").innerHTML = lesson_info['lesson']
-
     // Create the editor
+    let code = lesson_info['code']
+    if (localStorage.getItem('answers')) {
+        if (JSON.parse(localStorage.getItem('answers'))[lesson_info['name']]) {
+            code = JSON.parse(localStorage.getItem('answers'))[lesson_info['name']]
+        }
+    }
     variables['codeAreas']['desktop']['input'] = CodeMirror(document.getElementById("right"), {
-        value: lesson_info['code'],
+        value: code,
         mode: "python",
         lineNumbers: true,
         theme: "theme",
@@ -71,21 +78,22 @@ async function createDesktop() {
     const spacer = document.createElement("div")
     spacer.classList.add("spacer")
     spacer.id = "spacer_desktop"
-
+    const buttonContainer = document.createElement("div")
+    buttonContainer.classList.add("button_container")
     const runButton = document.createElement("button")
     runButton.addEventListener("click", (e) => run(e))
     runButton.id = "run_desktop"
     runButton.classList.add("run")
     runButton.innerText = "Run ❯"
     const resetButton = document.createElement("button")
-    runButton.addEventListener("click", (e) => reset(e))
+    resetButton.addEventListener("click", (e) => reset(e))
     resetButton.id = "reset_desktop"
     resetButton.classList.add("run")
     resetButton.innerText = "Reset"
 
     // Add the components to the page
-    document.getElementById("right").appendChild(runButton)
-    document.getElementById("right").appendChild(spacer)
+    buttonContainer.append(resetButton, runButton)
+    document.getElementById("right").append(buttonContainer, spacer)
 
     // Create the shell
     changeShell('desktop', '>>> ', true)
@@ -119,33 +127,25 @@ async function createMobile() {
     const spacer = document.createElement("div")
     spacer.classList.add("spacer")
     spacer.id = "spacer_mobile"
+    const buttonContainer = document.createElement("div")
+    buttonContainer.classList.add("button_container")
+    buttonContainer.id = "button_container_mobile"
     const runButton = document.createElement("button")
     runButton.addEventListener("click", (e) => run(e))
     runButton.id = "run_mobile"
     runButton.classList.add("run")
     runButton.innerText = "Run ❯"
+    const resetButton = document.createElement("button")
+    resetButton.addEventListener("click", (e) => reset(e))
+    resetButton.id = "reset_mobile"
+    resetButton.classList.add("run")
+    resetButton.innerText = "Reset"
 
     // Add the components to the page
-    document.getElementById("code_page_mobile").appendChild(runButton)
+    buttonContainer.append(resetButton, runButton)
+    document.getElementById("code_page_mobile").append(buttonContainer, spacer)
     document.getElementById("code_page_mobile").appendChild(spacer)
     changeShell('mobile', '>>> ', true)
-
-    // Create the back and next buttons
-    const nextButton = document.createElement("button")
-    nextButton.id = "next_mobile"
-    nextButton.classList.add("run")
-    nextButton.classList.add("button_mobile")
-    if (lessons_to_nums[variables['last_lesson']] > lessons_to_nums[variables['lesson']]) {
-        nextButton.classList.add("valid")
-    }
-    nextButton.innerText = "Next"
-    nextButton.addEventListener("click", () => {changeLesson('next')})
-    const backButton = document.createElement("button")
-    backButton.id = "back_mobile"
-    backButton.classList.add("run")
-    backButton.classList.add("button_mobile")
-    backButton.innerText = "Back"
-    backButton.addEventListener("click", () => {changeLesson('back')})
 
     // Hide the code page
     document.getElementById("code_page_mobile").style.display = "none"
@@ -279,12 +279,6 @@ function switchTab(tab) {
     other_tab.classList.remove("selected")
 }
 
-// TODO: Make a compiling notification for when the code is running
-// TODO: Make a compiling notification for when the code is running
-// TODO: Make a compiling notification for when the code is running
-// TODO: Make a compiling notification for when the code is running
-// TODO: Make a compiling notification for when the code is running
-
 // Listener for the run button
 async function run(event) {
     send_notif("loading", "Running code...")
@@ -397,6 +391,15 @@ function changeLesson(direction, platform) {
             return
         }
         nextLesson = lessons_to_nums[variables['lesson']]+1
+        let answers
+        if (!localStorage.getItem('answers')) {
+            answers = {}
+        }
+        else {
+            answers = JSON.parse(localStorage.getItem('answers'))
+        }
+        answers[variables['lesson']] = variables['codeAreas'][platform]['input'].getValue()
+        localStorage.setItem('answers', JSON.stringify(answers))
     }
     else if (direction === 'back') {
         if (document.getElementById(`back_${platform}`).classList.contains("invalid")) {
@@ -430,7 +433,6 @@ async function input(platform) {
 }
 
 async function nextQuestion(question, platform) {
-    console.log(platform)
     let previousOutput = variables['codeAreas'][platform]['output'].getValue()
     if (variables['statements'].indexOf(question)+1 === variables['statements'].length) {
         let code = variables['codeAreas'][platform]['input'].getValue()
@@ -443,7 +445,6 @@ async function nextQuestion(question, platform) {
         }
         code = code.join('')
         let results = await execute(code)
-        console.log(results)
         variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + results['run']['stdout'])
         variables['input_responses'] = []
         variables['statements'] = []
@@ -459,22 +460,24 @@ async function nextQuestion(question, platform) {
 function keyBindInput(editor, question, platform) {
     editor.setOption("extraKeys", {
         Enter: async () => {
-            console.log(question)
             let content = editor.getValue()
-            console.log(content)
             content = content.split("\n")
-            console.log(content)
             content = content[content.length-1]
-            console.log(content)
             if (content.occurrences(question) === 1) {content = content.replaceAll(`${question}`, "")}
             else {
                 while (content.occurrences(question) > 1) {
                     content = content.replace(`${question}`, "")
                 }
             }
-            console.log(content)
             variables['input_responses'].push(content)
             await nextQuestion(question, platform)
         }
     })
+}
+
+// Reset the code box
+function reset(event) {
+    let platform
+    event.target.id === 'reset_desktop' ? platform = 'desktop' : platform = 'mobile'
+    variables['codeAreas'][platform]['input'].setValue(variables['lesson_info']['code'])
 }

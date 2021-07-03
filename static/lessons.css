@@ -1,7 +1,7 @@
 #right {margin-left: auto; width: 50vw}
 
 #left {
-    margin: 30px auto 0 40px;
+    margin: 30px 20px 0 40px;
     min-width: calc(50vw - 65px);
     max-width: calc(50vw - 65px);
     max-height: 85vh;
@@ -329,10 +329,6 @@ h1 {
     width: 104%
 }
 
-#run_mobile {
-    margin-left: calc(100% - 80px);
-}
-
 html {overflow: hidden}
 
 @media (max-width: 900px) {
@@ -375,5 +371,17 @@ html {overflow: hidden}
     font: 400 22px Lato;
     cursor: pointer;
     text-align: center;
+}
 
+.button_container {
+    display: flex;
+    margin-left: calc(100% - 250px);
+}
+
+#button_container_mobile {
+    margin-left: calc(100% - 200px);
+}
+
+.button_container .run {
+    margin-left: 10px;
 }

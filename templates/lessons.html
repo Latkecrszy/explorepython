@@ -24,6 +24,7 @@
         if (!localStorage.getItem('lesson')) {localStorage.setItem('lesson', 'intro')}
         if (!localStorage.getItem('last_lesson')) {localStorage.setItem('last_lesson', 'intro')}
         console.log(`first_last_lesson: ${localStorage.getItem("last_lesson")}`)
+        console.log(localStorage.getItem("lesson"))
         createDesktop()
     </script>
     <body>
@@ -37,8 +38,8 @@
             <div id="left"></div>
             <div class="divide"></div>
             <div id="right"></div>
-            <button id="next_desktop" class="run next" onclick="changeLesson('next', 'mobile')">Next</button>
-            <button id="back_desktop" class="run next" onclick="changeLesson('back', 'mobile')">Back</button>
+            <button id="next_desktop" class="run next" onclick="changeLesson('next', 'desktop')">Next</button>
+            <button id="back_desktop" class="run next" onclick="changeLesson('back', 'desktop')">Back</button>
         </div>
         <div id="mobile">
             <header>

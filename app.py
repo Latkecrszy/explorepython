@@ -25,10 +25,13 @@ def lessons():
 
 @app.route("/lesson", methods=["GET", "POST"])
 def lesson():
-    content = markdown(open(f"lessons/{request.args.get('name')}.md").read())
-    code = '\n'.join(json.load(open("resources/code.json"))[request.args.get('name')])
-    expected_output = json.load(open("resources/expected_output.json"))[request.args.get('name')]
-    return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": request.args.get('name')})
+    name = request.args.get('name')
+    if name == "null":
+        name = "intro"
+    content = markdown(open(f"lessons/{name}.md").read())
+    code = '\n'.join(json.load(open("resources/code.json"))[name])
+    expected_output = json.load(open("resources/expected_output.json"))[name]
+    return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": name})
 
 
 @app.route("/arc-sw.js")

@@ -36,7 +36,7 @@
                 <div id="blurb">
                     <h1>Learn Python, by writing Python.</h1>
                     Everyone knows that the best way to learn is by doing.
-                    That's why ExplorePython provides an interactive experience with coding right in the browser to help
+                    That's why ExplorePython provides an interactive coding experience right in the browser to help
                     beginners explore the Python language.
                 </div>
                 <div id="buttons">
@@ -69,7 +69,7 @@
                         <h3>Self Paced</h3>
                         <p>
                             There are no deadlines or rushed assignments, everything is at your own speed. You can take
-                            a break for weeks or finish it all in a day - there's never any pressure to be on a strict timeline.
+                            a break for weeks or finish everything in a day - there's never any pressure to be on a strict timeline.
                         </p>
                     </div>
                     <div class="perk">
@@ -83,8 +83,9 @@
                     <div class="perk">
                         <img src="{{ url_for('static', filename='icons/student_pen.svg') }}" alt="person with pen">
                         <h3>Comprehension Tests</h3>
-                        <p>At the end of every lesson, you get to test out what you've learned. This helps with your
-                            comprehension, retention, and lets you explore the Python language by continually practicing your skills.
+                        <p>At the end of every lesson, you get to test out what you've learned by writing code of your own.
+                            This helps with your comprehension, retention, and lets you explore the Python language by
+                            continually practicing your skills.
                         </p>
                     </div>
                 </div>
@@ -119,14 +120,9 @@
                     </div>
                 </div>
             </div>
+            <button class="get_started" id="get_started_bottom" onclick="location.replace('/lessons')">Get Started</button>
         </div>
     </body>
     <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 </html>
-<!--ExplorePython is an interactive, fun way to learn and explore the Python language.
-                    With bite sized mini-lessons on topics from variables to Object Oriented Programming,
-                    ExplorePython provides the tools that every budding developer needs to succeed.
-                    After each lesson, you'll get the chance to test your knowledge by writing and running
-                    code relating to the topic you just learned.
-                    You then have your solution evaluated on the spot before moving on.-->

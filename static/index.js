@@ -57,9 +57,6 @@ async function write() {
 }
 
 async function runHome() {
-    console.log("doing")
     const results = await execute(editors['input'].getValue())
-    console.log(results['run']['output'])
     editors['output'].setValue(editors['output'].getValue()+'\n'+results['run']['output']+'>>> ')
-    console.log("done")
 }
