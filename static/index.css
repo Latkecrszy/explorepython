@@ -107,7 +107,7 @@ h1 {
 .first_message {
     text-align: center;
     width: 60%;
-    margin-left: 20%
+    margin: 0 0 100px 20%;
 }
 
 .first_message h1 {
