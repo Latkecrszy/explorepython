@@ -321,13 +321,20 @@ async function checkResults(results, code) {
         return await send_notif("incorrect_input", `You got the right result, but your code uses a method that is not allowed. Try again!`)
     }
     for (const i of expected_output['input']['includes']) {
+        console.log(code.includes(i))
         if (i === "'") {
             if (!["'", '"'].some(item => code.includes(item))) {
                 return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
         else {
-            if (!code.includes(i)) {
+            let occurred = false
+            code.split("\n").forEach((x) => {
+                if (x.includes(i) && !(x[0] === '#')) {
+                    occurred = true
+                }
+            })
+            if (!occurred) {
                 return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }

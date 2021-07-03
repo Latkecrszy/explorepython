@@ -18,5 +18,9 @@
   "ints_and_floats": {
     "output": ["[0-9]+"],
     "input": {"includes":  ["round", "print", "."], "excludes":  ["'"]}
+  },
+  "math": {
+    "output": ["[0-9]+"],
+    "input": {"includes":  [".", "'", "print", "(", ")", "+", "."], "excludes":  []}
   }
 }

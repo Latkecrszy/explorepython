@@ -6,7 +6,8 @@ html, body {
     scroll-behavior: smooth !important;
 }
 
-p, h1, h2, h3, h4, h5 {color: white; font-family: Lato}
+p, h1, h2, h3, h4, h5, ul, li {color: white; font-family: Lato}
+pre code {color: white}
 
 .run {
     background: #10cc5b;
