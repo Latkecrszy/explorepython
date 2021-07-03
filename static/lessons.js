@@ -77,6 +77,11 @@ async function createDesktop() {
     runButton.id = "run_desktop"
     runButton.classList.add("run")
     runButton.innerText = "Run ❯"
+    const resetButton = document.createElement("button")
+    runButton.addEventListener("click", (e) => reset(e))
+    resetButton.id = "reset_desktop"
+    resetButton.classList.add("run")
+    resetButton.innerText = "Reset"
 
     // Add the components to the page
     document.getElementById("right").appendChild(runButton)

@@ -49,12 +49,6 @@ header {
     flex-direction: column
 }
 
-#right {
-    width: calc(50vw - 40px);
-    margin: 50px 40px 0 0;
-    height: 100%;
-}
-
 #blurb {
     margin-left: 40px;
     color: white;
@@ -67,11 +61,20 @@ h1 {
     line-height: 45px
 }
 
+#right {
+    width: calc(50vw - 40px);
+    margin: 50px 40px 0 0;
+    height: 100%;
+    position: relative
+}
+
 #run {
     z-index: 7;
     position: absolute;
-    right: 44px;
-    top: calc(80px + max(250px, calc(100vh / 2.7)))
+    top: auto;
+    bottom: 55%;
+    right: 1%;
+    margin-left: 0;
 }
 
 #buttons {
@@ -111,7 +114,8 @@ h1 {
 }
 
 .first_message h1 {
-    font-size: 45px
+    font-size: 45px;
+    word-wrap: break-word;
 }
 .first_message p {
     font-size: 24px;
@@ -137,7 +141,6 @@ h1 {
     margin: 0 10px;
     transition: 0.5s;
     height: fit-content;
-    height: -moz-fit-content;
     cursor: pointer;
     min-height: 220px;
     display: table-cell;
@@ -183,10 +186,7 @@ h1 {
         width: 95vw !important
     }
     #run {
-        z-index: 7;
-        position: relative;
-        top: 45%;
-        right: 0;
+        bottom: 50%;
     }
 }
 
