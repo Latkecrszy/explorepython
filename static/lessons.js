@@ -22,27 +22,11 @@ let variables = {
     lesson_info: null
 }
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
-    "math": 5, "booleans": 6, "if_statements": 7, "modules": 8, "lists": 9, "dictionaries": 10, "functions": 11}
+    "math": 5, "booleans": 6, "if_statements": 7, "loops": 8, "modules": 9, "lists": 10, "dictionaries": 11, "functions": 12}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
-    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'modules', 9: 'lists', 10: 'dictionaries', 11: 'functions'}
+    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'loops', 9: 'modules', 10: 'lists', 11: 'dictionaries', 12: 'functions'}
 const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
 
-
-// Key Components:
-/*
-Function to create desktop site   DONE
-Function to create mobile site   DONE
-Function to add content to lessons menu   DONE
-Function to open lessons menu   DONE
-Function to close lessons menu   DONE
-Function to run code and return output   DONE
-Function to change content of shell (and create it)   DONE
-Function to check their response and display whether or not it was correct (and adjust next buttons)   DONE
-Function to change lesson (forwards or backwards)    DONE
-Function to send a notification   DONE
-Function to switch tabs (mobile only)   DONE
-Functions to handle input builtin
- */
 
 // Create the desktop version of the website
 const createDesktop = async () => {
@@ -305,18 +289,37 @@ async function run(event) {
 // Check the results of their code
 async function checkResults(results, code) {
     const expected_output = variables['expected_output']
+    let output = results['stdout']
     if (results['stderr'] !== '') {
         let newResults = results['stderr'].split("line")[0]
         newResults = results['stderr'].replace(newResults, '')
         return await send_notif("error", `Error: \n${newResults}\nTry again!`)
     }
-    if (!results['stdout'].match(expected_output['output'])) {
-        if (results['stdout'] === '\n') {
-            return await send_notif("incorrect_output", `Incorrect output. Try again!`)
+    for (const pattern of expected_output['output']) {
+        if (pattern === '#' && ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(item => output.includes(item))) {
+            return await send_notif("incorrect_output", `Incorrect output, must includes integers. Try again!`)
         }
-        return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
+        else if (pattern === "*" && output === '\n') {
+            return await send_notif("incorrect_output", `Output must contain content. Try again!`)
+        }
+        if (!pattern.split("|").some(item => output.includes(item))) {
+            if (output === '\n') {
+                return await send_notif("incorrect_output", `Incorrect output. Try again!`)
+            }
+            console.log(pattern.split("|").some(item => output.includes(item)))
+            console.log(pattern.split("|"))
+            return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
+        }
+        console.log("iterating")
+        let remove
+        for (let x of pattern.split("|")) {
+            if (output.includes(x)) {
+                remove = x
+                break
+            }
+        }
+        output.replace(remove, '')
     }
-
     if (expected_output['input']['excludes'].some(item => results['stdout'].match(item))) {
         return await send_notif("incorrect_input", `You got the right result, but your code uses a method that is not allowed. Try again!`)
     }
@@ -338,6 +341,7 @@ async function checkResults(results, code) {
                 return await send_notif("incorrect_input", `You got the right result, but your code does not use the method required. Try again!`);
             }
         }
+        code = code.replace(i, '')
     }
     const response = responses[Math.floor(Math.random()*responses.length)];
     document.getElementById("next_desktop").classList.add("valid")

@@ -1,26 +1,30 @@
 {
   "intro": {
-    "output":  [".*"],
+    "output":  [],
     "input": {"includes":  [], "excludes":  []}
   },
   "variables": {
-    "output":  [".+"],
+    "output":  ["*"],
     "input": {"includes":  ["=", "print"], "excludes":  []}
   },
   "strings": {
-    "output":  [".+"],
+    "output":  ["*"],
     "input": {"includes":  ["=", "print", "'"], "excludes":  []}
   },
   "builtins": {
-    "output": [".+"],
+    "output": ["*"],
     "input": {"includes":  ["input", "print", "=", "'"], "excludes":  []}
   },
   "ints_and_floats": {
-    "output": ["[0-9]+"],
+    "output": ["#"],
     "input": {"includes":  ["round", "print", "."], "excludes":  ["'"]}
   },
   "math": {
-    "output": ["[0-9]+"],
+    "output": ["#"],
     "input": {"includes":  [".", "'", "print", "(", ")", "+", "."], "excludes":  []}
+  },
+  "booleans": {
+    "output": ["True|False", "True|False", "True|False"],
+    "input": {"includes":  ["=", "=", "=", "print", "bool", "bool", "bool"], "excludes": []}
   }
 }

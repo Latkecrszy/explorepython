@@ -58,7 +58,6 @@
     "",
     "# Down here, display your variable with print.",
     "",
-    "",
     ""
   ],
   "math": [
@@ -75,6 +74,23 @@
     "",
     "",
     "",
-    "# Finally, print out their sum."
+    "# Finally, print out their sum.",
+    ""
+  ],
+  "booleans": [
+    "# Start by making 3 variables. They can be any type you want!",
+    "",
+    "",
+    "",
+    "",
+    "# Next, convert all of them to booleans with bool().",
+    "",
+    "",
+    "",
+    "",
+    "# Finally. print them out.",
+    "",
+    "",
+    ""
   ]
 }
