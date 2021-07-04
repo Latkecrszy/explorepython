@@ -296,11 +296,17 @@ async function checkResults(results, code) {
         return await send_notif("error", `Error: \n${newResults}\nTry again!`)
     }
     for (const pattern of expected_output['output']) {
-        if (pattern === '#' && ![0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(item => output.includes(item))) {
-            return await send_notif("incorrect_output", `Incorrect output, must includes integers. Try again!`)
+        if (pattern === '#') {
+            if (![0, 1, 2, 3, 4, 5, 6, 7, 8, 9].some(item => output.includes(item))) {
+                return await send_notif("incorrect_output", `Incorrect output, must include integers. Try again!`)
+            }
+            continue
         }
-        else if (pattern === "*" && output === '\n') {
-            return await send_notif("incorrect_output", `Output must contain content. Try again!`)
+        else if (pattern === "*") {
+            if (output === '\n') {
+                return await send_notif("incorrect_output", `Output must contain content. Try again!`)
+            }
+            continue
         }
         if (!pattern.split("|").some(item => output.includes(item))) {
             if (output === '\n') {
@@ -310,6 +316,7 @@ async function checkResults(results, code) {
             console.log(pattern.split("|"))
             return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
         }
+        //!pattern.split("&").every(item => output.includes(item))
         console.log("iterating")
         let remove
         for (let x of pattern.split("|")) {
