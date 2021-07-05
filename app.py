@@ -29,15 +29,20 @@ def lesson():
     if name == "null":
         name = "intro"
     content = markdown(open(f"lessons/{name}.md").read())
-    code = '\n'.join(json.load(open("resources/code.json"))[name])
-    expected_output = json.load(open("resources/expected_output.json"))[name]
-    return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": name})
+    if name != "final":
+        code = '\n'.join(json.load(open("resources/code.json"))[name])
+        expected_output = json.load(open("resources/expected_output.json"))[name]
+        hints = json.load(open("resources/hints.json"))[name]
+    else:
+        code = ""
+        expected_output = {"output":  [], "input": {"includes":  [], "excludes":  []}}
+        hints = []
+    return jsonify({"lesson": content, "code": code, "expected_output": expected_output, "name": name, "hints": hints})
 
 
 @app.route("/arc-sw.js")
 def arc():
     return send_file("arc-sw.js")
-
 
 
 if __name__ == '__main__':

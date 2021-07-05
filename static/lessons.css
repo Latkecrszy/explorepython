@@ -90,13 +90,13 @@
     border-radius: 5px;
     font: 400 16px Lato;
     color: white;
-    padding: 5px
+    padding: 5px;
 }
 
 #lessons {
     position: absolute;
     width: 300px;
-    height: 97%;
+    height: 90%;
     left: -310px;
     top: 0;
     display: flex;

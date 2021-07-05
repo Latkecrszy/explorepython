@@ -26,5 +26,25 @@
   "booleans": {
     "output": ["True|False", "True|False", "True|False"],
     "input": {"includes":  ["=", "=", "=", "print", "bool", "bool", "bool"], "excludes": []}
+  },
+  "if_statements": {
+    "output": ["\n", "*"],
+    "input": {"includes":  ["=", "'", "print", "input", "if", ":", "==", "else"], "excludes":  []}
+  },
+  "while_loops": {
+    "output": ["range(1, 100)"],
+    "input": {"includes":  ["while", "print", "=", ":", "+="], "excludes": []}
+  },
+  "lists": {
+    "output": ["*"],
+    "input": {"includes":  ["[", "]", "=", ",", ",", "'", "print", "input"], "excludes":  ["for "]}
+  },
+  "for_loops": {
+    "output": ["\n", "\n", "*"],
+    "input": {"includes":  ["[", "]", "=", "for", "in", "print", "index"], "excludes": ["while "]}
+  },
+  "functions": {
+    "output": ["*"],
+    "input": {"includes": ["add_strings", "(", "(", ")", ")", "def", ":", "print", "return", "+"], "excludes":  []}
   }
 }

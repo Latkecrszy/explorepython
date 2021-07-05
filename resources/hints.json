@@ -1,0 +1,18 @@
+{
+  "intro": [],
+  "variables": [],
+  "strings": [],
+  "builtins": [],
+  "ints_and_floats": [],
+  "math": [],
+  "booleans": [],
+  "if_statements": [],
+  "while_loops": [
+    "Start by creating an integer variable outside the loop. What value should it have?",
+    "To keep the loop running, check if the variable is less or equal to than 100. This will look like while variable_name <= 100:",
+    "Inside the loop, print out the number before adding to it. This will make it start at 1 instead of 2."
+  ],
+  "lists": [],
+  "for_loops": [],
+  "functions": []
+}

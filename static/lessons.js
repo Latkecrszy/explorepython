@@ -19,12 +19,14 @@ let variables = {
     input_responses: [],
     lesson: localStorage.getItem('lesson'),
     last_lesson: localStorage.getItem('last_lesson'),
-    lesson_info: null
+    lesson_info: null,
+    hints: null,
+    hint: 0
 }
 const lessons_to_nums = {"intro": 0, "variables": 1, "strings": 2, "builtins": 3, "ints_and_floats": 4,
-    "math": 5, "booleans": 6, "if_statements": 7, "loops": 8, "modules": 9, "lists": 10, "dictionaries": 11, "functions": 12}
+    "math": 5, "booleans": 6, "if_statements": 7, "while_loops": 8, "lists": 9, "for_loops": 10, "functions": 11, "final": 12}
 const nums_to_lessons = {0: 'intro', 1: 'variables', 2: 'strings', 3: 'builtins', 4: 'ints_and_floats',
-    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'loops', 9: 'modules', 10: 'lists', 11: 'dictionaries', 12: 'functions'}
+    5: 'math', 6: 'booleans', 7: 'if_statements', 8: 'while_loops', 9: 'lists', 10: 'for_loops', 11: "functions", 12: "final"}
 const responses = ["Great job!", "Good work!", "Great work!", "Good work!", "Nicely done!", "Nice job!", "Nice work!", "Well done!"]
 
 
@@ -36,6 +38,7 @@ const createDesktop = async () => {
     const lesson_info = await (await fetch(`/lesson?name=${variables['lesson']}`)).json()
     variables['lesson_info'] = lesson_info
     variables['expected_output'] = lesson_info['expected_output']
+    variables['hints'] = lesson_info['hints']
     document.getElementById("left").innerHTML = lesson_info['lesson']
     // Create the editor
     let code = lesson_info['code']
@@ -282,6 +285,7 @@ async function run(event) {
     variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     //changeShell(platform, previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
     // Check their results
+    focusMouse(platform)
     await checkResults(results['run'], code)
 }
 
@@ -308,6 +312,17 @@ async function checkResults(results, code) {
             }
             continue
         }
+        else if (pattern.startsWith("range")) {
+            const startRange = parseInt(pattern.split("range(")[1].split(", ")[0])
+            const endRange = parseInt(pattern.split("range(")[1].split(", ")[1].replace(")", ""))
+            for (let x = startRange; x < endRange; x++) {
+                const expectedNumber = x === startRange ? `${x}\n`: `\n${x}\n`
+                if (!output.includes(expectedNumber)) {
+                    return await send_notif("incorrect_output", `Incorrect output: Does not include ${x}. Try again!`)
+                }
+            }
+            continue
+        }
         if (!pattern.split("|").some(item => output.includes(item))) {
             if (output === '\n') {
                 return await send_notif("incorrect_output", `Incorrect output. Try again!`)
@@ -316,7 +331,6 @@ async function checkResults(results, code) {
             console.log(pattern.split("|"))
             return await send_notif("incorrect_output", `Incorrect output: \n${results['stdout']}\nTry again!`)
         }
-        //!pattern.split("&").every(item => output.includes(item))
         console.log("iterating")
         let remove
         for (let x of pattern.split("|")) {
@@ -351,8 +365,11 @@ async function checkResults(results, code) {
         code = code.replace(i, '')
     }
     const response = responses[Math.floor(Math.random()*responses.length)];
-    document.getElementById("next_desktop").classList.add("valid")
-    document.getElementById("next_mobile").classList.add("valid")
+    if (variables['lesson'] !== 'final') {
+        document.getElementById("next_desktop").classList.add("valid")
+        document.getElementById("next_mobile").classList.add("valid")
+    }
+
     return await send_notif("correct", `${response} Click Next to continue!`)
 }
 
@@ -363,9 +380,21 @@ function keyBind(editor, platform) {
             let content = editor.getValue()
             let splitContent = content.split(">>> ")
             content = splitContent[content.split(">>> ").length-1]
-            let results = await execute(content)
             let previousOutput = variables['codeAreas'][platform]['output'].getValue()
+            console.log(variables['hints'])
+            if (content === "hint") {
+                if (variables['hint'] > variables['hints'].length-1) {
+                    variables['codeAreas'][platform]['output'].setValue(previousOutput+'\nNo more hints available\n>>> ')
+                }
+                variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+variables['hints'][variables['hint']]+'\n>>> ')
+                return variables['hint']++
+            }
+            else if (content.startsWith('hint(') && content.endsWith(')')) {
+                return variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+variables['hints'][content.split('(')[1].split(')')[0]]+'\n>>> ')
+            }
+            let results = await execute(content)
             variables['codeAreas'][platform]['output'].setValue(previousOutput+'\n'+results['run']['stdout']+results['run']['stderr']+'\n>>> ')
+            focusMouse(platform)
         }
     })
 }
@@ -448,6 +477,7 @@ async function input(platform) {
         variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + variables['statements'][0])
         keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][0], platform)
     }
+    focusMouse(platform)
 }
 
 async function nextQuestion(question, platform) {
@@ -463,15 +493,16 @@ async function nextQuestion(question, platform) {
         }
         code = code.join('')
         let results = await execute(code)
-        variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + results['run']['stdout'])
+        variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + results['run']['stdout'] + '\n>>> ')
         variables['input_responses'] = []
         variables['statements'] = []
         variables['original_statements'] = []
         keyBind(variables['codeAreas'][platform]['output'])
         return await checkResults(results['run'], variables['codeAreas'][platform]['input'].getValue())
     }
-    variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + variables['statements'][variables['statements'].indexOf(question)+1] + '\n>>> ')
+    variables['codeAreas'][platform]['output'].setValue(previousOutput + '\n' + variables['statements'][variables['statements'].indexOf(question)+1])
     keyBindInput(variables['codeAreas'][platform]['output'], variables['statements'][variables['statements'].indexOf(question)+1], platform)
+    focusMouse(platform)
 
 }
 
@@ -488,6 +519,7 @@ function keyBindInput(editor, question, platform) {
                 }
             }
             variables['input_responses'].push(content)
+            focusMouse(platform)
             await nextQuestion(question, platform)
         }
     })
@@ -495,7 +527,23 @@ function keyBindInput(editor, question, platform) {
 
 // Reset the code box
 function reset(event) {
-    let platform
-    event.target.id === 'reset_desktop' ? platform = 'desktop' : platform = 'mobile'
+    // Check the platform
+    const platform = event.target.id === 'reset_desktop' ? 'desktop' : 'mobile'
+    // Set the code box to the original code
     variables['codeAreas'][platform]['input'].setValue(variables['lesson_info']['code'])
+}
+
+// Focus the cursor in the console
+function focusMouse(platform) {
+    // Get the number of lines
+    const lines = variables['codeAreas'][platform]['output'].getValue().split("\n").length
+    // Find the length of the last line
+    const lastChar = variables['codeAreas'][platform]['output'].getValue().split("\n")[lines-1].length
+    // Focus the editor
+    variables['codeAreas'][platform]['output'].focus()
+    // Set the cursor position
+    variables['codeAreas'][platform]['output'].setCursor({
+             line: lines,
+             ch: lastChar,
+           });
 }

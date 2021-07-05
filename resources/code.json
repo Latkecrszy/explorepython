@@ -92,5 +92,63 @@
     "",
     "",
     ""
+  ],
+  "if_statements": [
+    "# Starting here, ask the user for their name",
+    "",
+    "",
+    "# Create your if statement here. Check if they put in your name!",
+    "# Inside the if statement, print them a message if they put in your name.",
+    "",
+    "# Here, you can put an else block to check if they did not put in your name.",
+    "# Inside the else, print them a message saying something.",
+    ""
+  ],
+  "while_loops": [
+    "# Start by making your variables up here. You'll do the rest on your own.",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "lists": [
+    "# Start up here by creating your list. Make sure it has at least 3 items!",
+    "",
+    "",
+    "# Next, ask the user the index of the item they'd like to see.",
+    "",
+    "# Here, convert that index into an integer with int().",
+    "",
+    "# Finally, print out the item with the index they entered.",
+    "# You can either make a new variable and print that, or get the item from inside the print statement.",
+    "",
+    ""
+  ],
+  "for_loops": [
+    "# Begin up here by making your list. Remember to include at least 3 items!",
+    "",
+    "",
+    "# Next, make your for loop here. Name your variable whatever you want!",
+    "",
+    "# Print out each item here.",
+    "",
+    "# Also print out the index of the item using list.index().",
+    "",
+    ""
+  ],
+  "functions": [
+    "# Create your function up here. Remember to name it add_strings and take in two parameters!",
+    "",
+    "# Inside the function, return the two strings added together",
+    "",
+    "",
+    "",
+    "# Down here, call your function and store its output in a variable.",
+    "# Don't forget to pass in two strings as parameters!",
+    "",
+    "# Finally, print out the output of your function.",
+    ""
   ]
 }

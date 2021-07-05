@@ -2,6 +2,13 @@
     font: 400 35px Lato;
 }
 
+#logo_container {
+    display: flex
+}
+#logo {
+    margin: 33px 10px 0 0
+}
+
 body {
     margin: 0;
     display: flex;
@@ -10,7 +17,7 @@ body {
 }
 
 header {
-    margin: 0 10px 10px 10px;
+    margin: -10px 10px 10px 10px;
     padding: 0 15px;
     box-sizing: border-box;
     display: flex;
@@ -198,6 +205,11 @@ h1 {
     font-size: 30px;
     background: #10cc5b;
     cursor: pointer
+}
+
+footer {
+    margin: 0 20px 10px auto;
+    text-align: right;
 }
 
 

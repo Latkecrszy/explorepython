@@ -39,6 +39,13 @@ You can also convert strings to floats with the `float()` builtin.
 You may be able to guess that it turns floats or integers into strings. `x = str(7)` would make `x` equal to `"7"`, and 
 `x = str(4.5)` would make `x` equal to `"4.5"`.
 
+## Doing math on variables
+If I have `x = 5`, it may not be immediately clear how to change the value of x by adding, subtracting, or doing any other operation.
+However, there's a simple way to do this for all operators: adding `=` to the end. What this means is that to add to `x`,
+instead of just saying `x + 1`, we would say `x += 1`. This is actually shorthand for `x = x + 1`, 
+which redefines the variable as one more than it was. The same goes for all other operators, `x *= 2` instead of 
+`x * 2`, `x -= 1` instead of `x - 1`, and so on. 
+
 ## Your turn!
 Now, it's your turn to try. For this lesson, you'll create two variables, both strings. One will be a stringified integer,
 and the other will be a stringified float. 

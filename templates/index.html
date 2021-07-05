@@ -21,10 +21,13 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/theme/midnight.css"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.1/mode/python/python.min.js" integrity="sha512-A0+B02KhL7qpmqYmzkvN1jMSj/SrBfPdkxuX/llMFJJQ3mSqTd9pk1Ppuo+WxvrHfEwlJ0lDhkk1Y7prJpcvsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://kit.fontawesome.com/17a232a608.js" crossorigin="anonymous"></script>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='icons/logo.png') }}" class="logo">
+        <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/logo.png') }}" class="logo">
     </head>
     <body>
         <header>
             <div id="logo_container">
+                <img src="{{ url_for('static', filename='icons/logo.png') }}" height="60px" width="60px" alt="magnifying glass" id="logo">
                 <p id="logo_text">ExplorePython</p>
             </div>
             <div id="links">
@@ -122,6 +125,10 @@
             </div>
             <button class="get_started" id="get_started_bottom" onclick="location.replace('/lessons')">Get Started</button>
         </div>
+        <footer>
+            <p>Created by Seth Raphael</p>
+            <p>Logo by Ari</p>
+        </footer>
     </body>
     <script src="{{ url_for('static', filename='lessons.js') }}"></script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

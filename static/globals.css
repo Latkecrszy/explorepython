@@ -7,7 +7,12 @@ html, body {
 }
 
 p, h1, h2, h3, h4, h5, ul, li {color: white; font-family: Lato}
-pre code {color: white}
+pre {
+    background: #1f2b40;
+    border-radius: 5px;
+    padding: 5px;
+}
+pre code {background: none !important; color: white;}
 
 .run {
     background: #10cc5b;
