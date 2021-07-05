@@ -10,5 +10,6 @@ You then have your solution evaluated on the spot before moving on.
 https://explorepython.dev
 ![Wesbite](static/images/website.png)
 
+### Set up the project
 ExplorePython is run on a flask server. 
 To host locally, just clone the repository, install the requirements, and run `app.py`. 
